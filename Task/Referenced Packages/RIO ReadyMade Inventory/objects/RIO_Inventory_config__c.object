@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <customSettingsVisibility>Protected</customSettingsVisibility>
+    <description>RIO Inventory configuration variable are stored here</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Auto_Fill_Product_External_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Determines the behavior of the Product External Id  auto fill function, when enabled in the choice this will automatically fill the Product External Id with the field chosen in the option here</description>
+        <externalId>false</externalId>
+        <label>Auto Fill Product External Id</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CText__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>CText</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Default_Location_choice__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Determines where the default location will be retrieved from by the RIO Inventory system, possible value include: &apos;Product&apos;, &apos;Account&apos;</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This determines whether we set the default location in the Product detail, or Account detail of the relevant Opportunity, which needs to be specified for any Product that will be added to Opportunity 
+(RIO Inventory Plus only)</inlineHelpText>
+        <label>Default Location choice</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Enable_Apps__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Enable RIO Inventory, disabling this will completely stop all RIO Inventory trigger functions and render the system non functional.</description>
+        <externalId>false</externalId>
+        <label>Enable RIO Inventory</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Plus__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Enable RIO Inventory Plus features such as multi locations, etc</description>
+        <externalId>false</externalId>
+        <label>Enable Plus Features</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Sales_Order__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Enables Sales Order path which will allow the user to generate Order from Opportunities that will replicate the Opportunity information into the Order.</description>
+        <externalId>false</externalId>
+        <label>Enable Sales Order</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Expired__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Determines if the RIO Inventory license key is expired or not</description>
+        <externalId>false</externalId>
+        <label>Expired</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Expiry_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Contains the expiry date for the license key that the user have entered into the system, this expiry date is acquired from the license key after it is decrypted.</description>
+        <externalId>false</externalId>
+        <label>Expiry Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Inventory_Transaction_History_Keep_Days__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Determines how long the history will be kept in the system</description>
+        <externalId>false</externalId>
+        <label>Inventory Transaction History Keep Days</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>License_Key__c</fullName>
+        <deprecated>false</deprecated>
+        <description>holds the License Key that the user have entered into RIO Inventory</description>
+        <externalId>false</externalId>
+        <label>License Key</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Old_Version_Exist__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>this checkbox will be toggled by the post installation script to note that the package was installed against an existing version of RIO Inventory, and thus may possibly need to import the old data over to the new version format.</description>
+        <externalId>false</externalId>
+        <label>Old Version Exist</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Opportunity_Allocation__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The threshold percentage upon which an Opportunity enters allocation stage, ie: all Opp Product values that enters this stage will be considered in the Quantity Allocated amount, and anything below this percentage will not be considered for either Quantity Allocated or Quantity on Hand.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Quantity Allocated will be incremented when an Opportunity reaches this Probability % 
+(RIO Inventory Plus only)</inlineHelpText>
+        <label>Allocation - Probablility (%)</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Opportunity_Probability_Threshold__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Determines the probability threshold for the Opportunity, anything above the value will mean the Opportunity will be considered as a qualified Opportunity (done deal), while anything below the value is non qualified (ongoing deal).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Inventory will be decremented from Quantity on Hand when an Opportunity reaches this Probability %</inlineHelpText>
+        <label>Opportunity - Probablility (%)</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Overwrite_Product_Threshold__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>When checked, the threshold value set above will be used to overwrite all valid product (non inventory product, and product with no quantity on hand will be ignored) upon saving this configuration.
+
+While this option is activated, the system will also automatically populate product&apos;s threshold upon update or creation of new product record if there is quantity on hand detected, and no threshold in place</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box to allow different  Product Quantity Threshold values to be set for each Product.  Unchecked means the above value will apply to ALL Products.</inlineHelpText>
+        <label>Overwrite Product Quantity Threshold</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Quantity_Threshold__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Determines the threshold value for the product quantity before RIO Inventory status consider the stock to be below the limit.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A warning about low inventory will occur at this level - for all inventory products</inlineHelpText>
+        <label>Product Quantity Threshold</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Trial_License__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>if the license key saved is a Trial License key then this checkbox will be toggled on</description>
+        <externalId>false</externalId>
+        <label>Trial License</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>RIO Inventory config</label>
+</CustomObject>

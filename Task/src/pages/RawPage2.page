@@ -1,0 +1,7 @@
+<apex:page controller="RawController">
+<apex:form >
+    <apex:outputLabel value="click" id="lnkLeadCnt"
+            onclick="window.open('/apex/Raw','width=100px,height=50px', '_blank');return false;" />
+            <apex:inputText value="{!name}"/>
+            </apex:form>
+</apex:page>

@@ -1,0 +1,43 @@
+<apex:page controller="RawController">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script>
+$(function()
+{
+$(".errorMsg").css("display","none");
+});
+  
+
+  
+ function validate(){
+        var fld = $(".inpFolder").val();
+        if(fld == '' || fld == null){
+        alert('hi');
+            $(".errorMsg").css("display","block");
+            return false;
+        }else {
+            
+            return true;
+        }
+    }
+</script>
+
+    <apex:form id="form">
+  
+        <apex:outputLabel value="click" id="lnkLeadCnt"
+            onclick="window.open('/apex/Raw','width=100px,height=50px', '_blank');return false;" />
+            <apex:commandButton value="Search Again" action="{!Redirect}" onclick="window.top.close();"  />
+            
+            <apex:pageBlock title="Testing"  mode="edit">
+            {!$Label.Loading}
+                <apex:pageblockSection >
+                <div class="requiredInput">
+                <div class="requiredBlock"></div>
+                     <apex:inputText label="Name" styleClass="inpFolder"/>
+                     <div class="errorMsg"><strong>Error:</strong> Field must be filled</div>
+                     </div>
+                     <apex:commandButton value="check" onclick="return validate()" reRender="" action="{!checkdemo}"/>
+                </apex:pageblockSection>
+               
+            </apex:pageBlock>
+ </apex:form>
+</apex:page>

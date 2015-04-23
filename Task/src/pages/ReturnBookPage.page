@@ -1,0 +1,51 @@
+<apex:page controller="ReturnBook">
+    <apex:form id="popup">
+    <apex:pageMessages id="showmsg"></apex:pageMessages>
+        <apex:pageBlock id="IssueBookPageBlock">
+            <apex:pageBlockSection id="searchMemberBlock" columns="3">
+                <apex:inputText id="searchMember" value="{!searchMemberString}" style="width:500px" html-autocomplete="off">
+                    <apex:actionSupport event="onkeyup" reRender="resultBlock, IssuedBookBlock" action="{!searchMember}"/>
+                </apex:inputText>
+                <apex:commandButton value="Search Member" reRender="resultBlock, showmsg, IssuedBookBlock" action="{!searchMember}" status="searchStatus"/>
+                <apex:actionStatus id="searchStatus" style="align:right;" layout="inline" >
+                    <apex:facet name="start" >
+                    <div class="waitingSearchDiv" style="background-color: #ffffff; height:100%; opacity:0.80; width:100%;">
+                        <div class="waitingHolder" style="top: 100px; width: 91px;">
+                            <img src="/img/loading.gif" height="20" width="20"/><br/>
+                            <span class="waitingDescription">{!$Label.Loading}</span>
+                        </div>
+                    </div>
+                    </apex:facet>
+                </apex:actionStatus>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="resultBlock">
+                <apex:pageBlockTable value="{!memberList}" var="record">
+                    <apex:column headerValue="Member No" value="{!record.Library_Member_No__c}"/>
+                    <apex:column headerValue="Member Name">
+                        <apex:commandLink id="id" reRender="IssuedBookBlock, showmsg" action="{!issuedBooksToMember}"> {!record.Name} 
+                            <apex:param name="memberId" value="{!record.Id}" />
+                        </apex:commandLink>
+                    </apex:column>
+                    <apex:column headerValue="Member Phone No" value="{!record.Phone_No__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock id="IssuedBookBlock" >
+                <apex:pageBlockTable value="{!bookIssuedList}" var="record">
+                    <apex:column headerValue="Book Issue No" value="{!record.Name}" />
+                    <apex:column headerValue="Member Name" value="{!record.Library_Member_Id__c}"/>
+                    <apex:column headerValue="Book Name" value="{!record.Book_Id__c}"/>
+                    <apex:column headerValue="Issue Date" value="{!record.Issue_Date__c}"/>
+                    <apex:column headerValue="Last Date To Return" value="{!record.Due_Date_For_Return__c}"/>
+                    <apex:column headerValue="Date Returned" value="{!record.Date_Returned__c}"/>
+                    <apex:column headerValue="Extra Days" value="{!record.Extra_Days__c}"/>
+                    <apex:column headerValue="Amount Of Fine" value="{!record.Amount_Of_Fine__c}"/>
+                    <apex:column headerValue="Return Book">
+                        <apex:commandButton id="returnBookBtn" value="Return Book" rendered="{!ISNULL(record.Date_Returned__c)}" reRender="showmsg,IssuedBookBlock" action="{!acceptReturnedBook}">
+                            <apex:param name="issueBookId" value="{!record.Id}" />
+                        </apex:commandButton>
+                    </apex:column>
+                </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

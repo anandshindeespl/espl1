@@ -1,0 +1,20 @@
+<apex:page controller="ReadCSVActivity">
+    <apex:form > 
+        <apex:pageBlock title="Browse CSV file to display">
+         <apex:pageMessages id="showmsg"></apex:pageMessages>
+            <apex:panelGrid columns="2" >
+                  <apex:inputFile value="{!csvFileBody}"  filename="{!filename}" fileSize="{!size}"/>
+                  <apex:commandButton value="Read File" action="{!readFile}"/>
+            </apex:panelGrid>
+        </apex:pageBlock>
+        <apex:pageBlock id="pb" title="Records " rendered="{!check}">
+           <apex:dataTable value="{!accountList}" var="rec" width="50%">
+              <apex:column value="{!rec.name}" />
+              <apex:column value="{!rec.AccountNumber}" />
+              <apex:column value="{!rec.Phone}" />
+              <apex:column value="{!rec.Type}" />
+              <apex:column value="{!rec.Website}" />
+         </apex:dataTable> 
+     </apex:pageBlock>
+   </apex:form>
+</apex:page>

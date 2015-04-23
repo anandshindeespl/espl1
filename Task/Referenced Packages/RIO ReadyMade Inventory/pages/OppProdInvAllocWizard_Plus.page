@@ -1,0 +1,102 @@
+<!-- 
+<apex:page>
+</apex:page>
+-->
+
+<apex:page standardController="OpportunityLineItem" tabStyle="Opportunity" extensions="readymade_inv.OppProdInvAllocWizard_VF_Ctrl_Plus" action="{!iaeToList}" title="Opportunity Product Inventory Allocation Wizard">
+
+    <style type="text/css">
+        .tblLabel {padding:0 20px 0 6px; font-size: .9em; font-weight: bold;}
+    </style>
+
+    <apex:form >
+    <apex:pageBlock title="Opportunity Product Inventory Allocation" mode="edit">
+
+        <apex:pageMessages />
+        
+        <apex:pageBlockButtons >
+           	<apex:commandButton value="Save" action="{!Save}" rendered="{!NOT(expired) && paid}"/>
+           	<apex:commandButton value="Cancel" action="{!Cancel}" rendered="{!NOT(expired) && paid}"/>
+           	<apex:commandButton value="Ok" action="{!Cancel}" rendered="{!expired || (NOT(expired) && NOT(paid))}"/>
+       	</apex:pageBlockButtons>
+          
+        <div style="height: 20px" />        
+        <apex:outputPanel >
+            <label for="pname" class="tblLabel">Product</label>
+            <apex:outputText id="pname" value="{!ProductName}" /><br/>
+        </apex:outputPanel>        
+        <apex:pageBlockSection >
+        <apex:outputPanel >
+            <label for="pname1" class="tblLabel">total of</label>
+            <apex:outputText id="pname1" value=" {!OppProductQuantity} items can be assigned" />
+            <apex:outputText id="pname2" value=", out of which {!OppProductNonAssignedQty} items not assigned" />
+        </apex:outputPanel>
+        </apex:pageBlockSection>
+        <div style="height: 20px" />
+        
+        <apex:pageBlockTable value="{!MatchingInvAllocationEntry}" var="item" title="Warehouse with existing allocation for the Product" columnsWidth="20%,20%,10%,10%,10%,10%,10%,10%" rendered="{!NOT(expired) && paid}">                      
+            
+            <apex:column headerValue="Location Code">
+                <apex:outputField value="{!item.Inventory__r.Warehouse_Location__r.readymade_inv__Warehouse_Location_Code__c}"/>              
+            </apex:column>
+            <apex:column headerValue="Warehouse">
+                <apex:outputField value="{!item.Inventory__r.Warehouse_Location__r.Name}"/>              
+            </apex:column>
+            <apex:column headerValue="Area">
+                <apex:outputField value="{!item.Inventory__r.Warehouse_Location__r.readymade_inv__Area__c}"/>              
+            </apex:column>
+            <apex:column headerValue="Zone">
+                <apex:outputField value="{!item.Inventory__r.Warehouse_Location__r.readymade_inv__Zone__c}"/>              
+            </apex:column>
+            <apex:column headerValue="Quantity on Hand">
+                <apex:outputField value="{!item.Inventory__r.readymade_inv__Qty_on_Hand__c}"/>
+            </apex:column>
+            <apex:column headerValue="Quantity Allocated">
+                <apex:outputField value="{!item.Inventory__r.readymade_inv__Qty_allocated__c}"/>
+            </apex:column>
+            <apex:column headerValue="Quantity Available">
+                <apex:outputField value="{!item.Inventory__r.readymade_inv__Qty_available__c}"/>
+            </apex:column>
+            <apex:column headerValue="Quantity Assigned">
+                <apex:inputField value="{!item.readymade_inv__Quantity__c}"/>
+            </apex:column>
+        </apex:pageBlockTable>
+        
+        <apex:pageBlockTable value="{!newInvAllocationEntries}" var="item" title="Warehouse with the Product that are not currently allocated" rendered="{!toggleNewInvAllocationEntryExist && NOT(expired) && paid}" columnsWidth="20%,20%,10%,10%,10%,10%,10%,10%" >     
+            <apex:column >
+                <apex:outputField value="{!item.readymade_inv__Warehouse_Location_Code__c}"/>              
+            </apex:column>
+            <apex:column >
+                <apex:outputField value="{!item.readymade_inv__Warehouse_Location_Name__c}"/>              
+            </apex:column>
+            <apex:column >
+                <apex:outputField value="{!item.readymade_inv__Warehouse_Location_Area__c}"/>              
+            </apex:column>
+            <apex:column >
+                <apex:outputField value="{!item.readymade_inv__Warehouse_Location_Zone__c}"/>              
+            </apex:column>
+            <apex:column >
+                <apex:outputField value="{!item.readymade_inv__Inventory_Location_Qty_on_Hand__c}"/>
+            </apex:column>
+            <apex:column >
+                <apex:outputField value="{!item.readymade_inv__Inventory_Location_Qty_Allocated__c}"/>
+            </apex:column>
+            <apex:column >
+                <apex:outputField value="{!item.readymade_inv__Inventory_Location_Qty_Available__c}"/>
+            </apex:column>
+            <apex:column >
+                <apex:inputField value="{!item.readymade_inv__Quantity__c}"/>
+            </apex:column>                                       
+        </apex:pageBlockTable>
+                      
+		<apex:pageBlockSection rendered="{!expired}">
+			<apex:pageMessage summary="RIO Inventory have expired! Please contact WDCi to renew the license key" severity="warning" strength="3" />
+		</apex:pageBlockSection>
+        
+        <apex:pageBlockSection rendered="{!NOT(expired) && NOT(paid)}">
+            <apex:pageMessage summary="This page is only applicable to RIO Inventory Plus with the enhanced multi location inventory functionality. Please contact WDCi to find out more" severity="warning" strength="3" />
+        </apex:pageBlockSection>
+			
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

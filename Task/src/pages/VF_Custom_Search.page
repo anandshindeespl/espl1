@@ -1,0 +1,25 @@
+<apex:page controller="VfSerachEngine" tabStyle="Account" docType="html-5.0">
+     <apex:form >
+         <apex:pageBlock title="Custom Search Engine">
+            <apex:pageBlockSection >
+                <apex:inputtext style="width:400px;" list="{!listString}" label="Search Here"  value="{!searchquery}">
+                <apex:actionSupport event="onchange" action="{!searchResults}" reRender="recBlock"/></apex:inputtext>
+                <apex:commandButton value="Search" action="{!searchResults}" reRender="recBlock"/>
+               
+            </apex:pageBlockSection>
+         </apex:pageBlock>
+         
+         <apex:pageBlock title="Result Links " id="recBlock">
+            <apex:pageBlockSection columns="1">
+              
+                <apex:outputText escape="false" value="{!body}"></apex:outputText>
+                
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons rendered="{!check}" >
+            <apex:commandButton value="Prev" action="{!prev}" reRender="recBlock"/>
+            <apex:commandButton value="Next" action="{!next}" reRender="recBlock"/>
+            </apex:pageBlockButtons>
+            
+         </apex:pageBlock>
+     </apex:form>
+</apex:page>

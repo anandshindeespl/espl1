@@ -1,0 +1,35 @@
+<!-- this VF page is intended to handle inventory transaction from the inventory detail page -->
+<apex:page standardController="readymade_inv__Inventory__c" extensions="readymade_inv.InvTranxWizard_Plus_VF_Ctrl_Plus" action="{!checkConfig}" title="Inventory Transaction Wizard" tabStyle="Inventory_Transaction__tab">
+
+    <style type="text/css">
+        .tblLabel {padding:0 20px 0 6px; font-size: .9em; font-weight: bold;}
+    </style>
+
+    <apex:form >
+    <apex:pageBlock title="Inventory Adjustment" mode="edit">
+
+        <apex:pageMessages />
+        
+        <apex:pageBlockButtons >
+            <apex:commandButton action="{!save}" value="Save" rendered="{!NOT(expired) && paid}"/>
+            <apex:commandButton action="{!Cancel}" value="Ok" rendered="{!expired || (NOT(expired) && NOT(paid))}"/>
+        </apex:pageBlockButtons>
+        
+        <apex:pageBlockSection columns="1" rendered="{!NOT(expired) && paid}">
+            <apex:inputfield value="{!newInvTrans.readymade_inv__Product__c}" required="true"/>
+            <apex:inputfield value="{!newInvTrans.readymade_inv__Warehouse_Location__c}" required="true"/>
+            <apex:inputfield value="{!newInvTrans.readymade_inv__Quantity__c}" required="true"/>
+            <apex:inputfield value="{!newInvTrans.readymade_inv__Message__c}"/>        
+            <apex:inputfield value="{!newInvTrans.readymade_inv__Overwrite_Existing_QoH_Plus__c}"/>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection rendered="{!expired}">
+            <apex:pageMessage summary="RIO Inventory have expired! Please contact WDCi to renew the license key" severity="warning" strength="3" />
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection rendered="{!NOT(expired) && NOT(paid)}">
+            <apex:pageMessage summary="This page is only applicable to RIO Inventory Plus with the enhanced multi location inventory functionality. Please contact WDCi to find out more" severity="warning" strength="3" />
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

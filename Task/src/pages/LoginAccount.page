@@ -1,0 +1,79 @@
+<apex:page controller="AccountOppActivity">
+   <apex:pageMessages id="showmsg"></apex:pageMessages>
+    <apex:form id="Form">
+    <head>
+<meta charset="utf-8"></meta>
+<title>jQuery UI Accordion - Default functionality</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css"/>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+
+<script>
+$(function() {
+$( "#accordion" ).accordion();
+});
+
+         function unmaskPassword(){
+         var unmask = document.getElementsByTagName('input');
+         for(var x = 0; x < unmask.length; x++) {
+         if(unmask[x].type.toLowerCase() == 'password' ) {
+         var test = unmask[x].type = 'text';
+    }
+  } 
+
+}
+         function maskPassword(){
+         var unmask = document.getElementsByTagName('input');
+         for(var x = 0; x < unmask.length; x++) {
+         if(unmask[x].type.toLowerCase() == 'text' ) {
+         var test = unmask[x].type = 'password';
+    }
+  } 
+
+}
+
+    </script>
+    </head>
+        <apex:pageBlock title="Login Here" rendered="{!check}">
+     <apex:pageBlockSection columns="1">
+        <apex:inputText value="{!username}" id="username" Label="UserName" />
+     </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" >
+        <apex:inputsecret value="{!password}" Label="Password"/>
+            <apex:image url="{!$Resource.eye}" width="30" height="20" ondblclick="return maskPassword();" onclick="return unmaskPassword();" />
+
+                  <apex:commandbutton id="login" value="Login" action="{!validateUser}" style="margin-left:200px;"/>
+</apex:pageBlockSection>
+ 
+        </apex:pageBlock>
+
+
+  <apex:pageBlock id="block1" rendered="{!check2}">
+  <apex:pageBlockButtons >
+<apex:commandButton value="Update" action="{!UpdateOpp}"/>
+</apex:pageBlockButtons>
+  
+     <apex:pageBlockSection >
+        <apex:selectList id="Pickvalue" value="{!pickvalue}" multiselect="false" size="1">
+            <apex:selectOption itemValue="Prospecting" itemLabel="Prospecting"/>
+            <apex:selectOption itemValue="Qualification" itemLabel="Qualification"/>
+            <apex:selectOption itemValue="Closed Won" itemLabel=" Closed Won"/>
+            <apex:selectOption itemValue="Closed Lost" itemLabel="Closed Lost"/>
+            </apex:selectList>
+     </apex:pageBlockSection>
+     
+     <div id="accordion">
+        <apex:repeat value="{!mapList}" var="objMap">
+            <h3><apex:outputText value="{!objMap}"/> </h3>
+            <div>
+                    <apex:repeat value="{!mapList[objMap]}" var="Wrap">
+                       <p><apex:inputcheckbox selected="{!Wrap.isCheck}"/><apex:outputText value="{!Wrap.oppobj.Name}" /></p>
+            </apex:repeat>
+            </div>
+        </apex:repeat>
+        </div>
+    
+   </apex:pageBlock>
+
+ </apex:form>
+</apex:page>

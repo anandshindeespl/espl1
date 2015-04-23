@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Default_Location_Plus__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Default Location that will be used for this Product if no inventory location exist for it</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default Location for this Product when it is added to an Opportunity.  ONLY used if the Configuration setting for Default Location Choice = Product.</inlineHelpText>
+        <label>Default Location+</label>
+        <referenceTo>Warehouse_Location__c</referenceTo>
+        <relationshipLabel>Products</relationshipLabel>
+        <relationshipName>Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Inventory_Product_Code_Plus__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <deprecated>false</deprecated>
+        <description>Unique third party product reference code</description>
+        <externalId>true</externalId>
+        <label>Inventory Product Code+</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Inventory_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Inventory Status+</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Non Inventory Item</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Inventory</fullName>
+                <color>#CC0000</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Available Inventory</fullName>
+                <color>#FF9900</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Low Inventory</fullName>
+                <color>#FFCC66</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Low Available Inventory</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Inventory Available</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Is_Non_Inventory_Item_Plus__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Non inventory Item can be anything that is not countable such as service or subscription</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box to identify this Product as non-inventory.</inlineHelpText>
+        <label>Is Non Inventory Item+</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Product_Quantity_Threshold__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Define a quantity threshold for this product for stock alert purposes</inlineHelpText>
+        <label>Product Quantity Threshold</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_Allocated_Plus__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates the quantity allocated through Opportunities or Order for the product in all the locations</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The total quantity allocated through Opportunities.</inlineHelpText>
+        <label>Quantity Allocated+</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_Available_Plus__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF((Quantity_on_Hand_Plus__c - Quantity_Allocated_Plus__c) &lt; 0, 0, Quantity_on_Hand_Plus__c - Quantity_Allocated_Plus__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The quantity available (Quantity on Hand - Quantity Allocated).</inlineHelpText>
+        <label>Quantity Available+</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_On_Hand__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Quantity On Hand</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_on_Hand_Plus__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates the quantity still present for the product in all the locations</description>
+        <externalId>false</externalId>
+        <inlineHelpText>DO NOT EDIT - use Inventory Adjustment.  This field is the total quantity on hand for this Product in all Warehouse Locations.</inlineHelpText>
+        <label>Quantity on Hand+</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <validationRules>
+        <fullName>StockThresholdIsBlank</fullName>
+        <active>true</active>
+        <description>error condition:
+- Qty on hand null -&gt; Threshold has value
+- Qty on hand has value -&gt; Threshold is null
+- RIO Inventory in basic mode</description>
+        <errorConditionFormula>IF( NOT( ISNULL( Quantity_On_Hand__c ) ) , ISNULL( Product_Quantity_Threshold__c )  , NOT( ISNULL( Product_Quantity_Threshold__c ) ) )
+&amp;&amp;
+ NOT(VLOOKUP($ObjectType.RIO_Inventory_config__c.Fields.Enable_Plus__c, $ObjectType.RIO_Inventory_config__c.Fields.Name, &quot;RIO Inventory Config 1&quot;))</errorConditionFormula>
+        <errorDisplayField>Product_Quantity_Threshold__c</errorDisplayField>
+        <errorMessage>Define a product quantity threshold or leave this field blank (no value, including zero) if this is a non inventory item and threshold is not applicable for this product, please ensure the Quantity on Hand is also blank for non inventory item.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Validate_Inventory_Threshold_Plus</fullName>
+        <active>true</active>
+        <description>If Non-Inventory Item is un-checked, Threshold must not be blank for RIO Inventory Plus mode</description>
+        <errorConditionFormula>Is_Non_Inventory_Item_Plus__c  = false  &amp;&amp; ISBLANK(Product_Quantity_Threshold__c)
+&amp;&amp;
+ VLOOKUP($ObjectType.RIO_Inventory_config__c.Fields.Enable_Plus__c, $ObjectType.RIO_Inventory_config__c.Fields.Name, &quot;RIO Inventory Config 1&quot;)</errorConditionFormula>
+        <errorDisplayField>Product_Quantity_Threshold__c</errorDisplayField>
+        <errorMessage>Product Quantity Threshold is required for physical Inventory Item product</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Inventory_Stock_Adjustment</fullName>
+        <availability>online</availability>
+        <description>Inventory Adjustment for this product will be handled by this VF page</description>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Inventory Stock Adjustment</masterLabel>
+        <openType>newWindow</openType>
+        <page>InvTranxWizard2_Plus</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+</CustomObject>

@@ -1,0 +1,45 @@
+<apex:page standardController="Campaign" extensions="CampaignDetailPage" >
+
+ <apex:form id="campaigndetails" >
+        <apex:pageBlock title="Campaign Detail Page" >
+               <apex:pageBlockButtons >
+                    <apex:commandButton value="Edit" rendered="{!detail}" action="{!editBlock}"/>
+                    <apex:commandButton value="Delete" onclick="return confirm('Are you sure?')" rendered="{!detail}" Action="{!deleteRecord}" />
+                    <apex:commandButton value="Save" rendered="{!edit}" Action="{!updateCamp}"/>
+               </apex:pageBlockButtons>
+              
+                    <apex:pageBlockSection title="Campaign Detail Page" columns="2" >  
+                        <apex:outputField value="{!record.OwnerId}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.OwnerId}"   rendered="{!edit}"/>
+                        <apex:outputField value="{!record.Name}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.Name}" rendered="{!edit}" />
+                        <apex:outputField value="{!record.Type}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.Type}" rendered="{!edit}"/>
+                        <apex:outputField value="{!record.Status}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.Status}" rendered="{!edit}" />
+                        <apex:outputField value="{!record.StartDate}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.StartDate}" rendered="{!edit}"/>
+                        <apex:outputField value="{!record.ParentId}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.ParentId}" rendered="{!edit}"/>
+                        <apex:outputField value="{!record.LastModifiedById}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.LastModifiedById}" rendered="{!edit}"/>
+                        <apex:outputField value="{!record.LastActivityDate}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.LastActivityDate}" rendered="{!edit}"/>
+                        <apex:inputField value="{!record.EndDate}" rendered="{!edit}"/>
+                        <apex:outputField value="{!record.EndDate}" rendered="{!detail}"/>
+                        <apex:outputField value="{!record.Description}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.Description}" rendered="{!edit}"/>
+                        <apex:outputField value="{!record.CreatedById}" rendered="{!detail}"/>
+                        <apex:inputField value="{!record.CreatedById}" rendered="{!edit}"/>
+                   </apex:pageBlockSection>
+          </apex:pageBlock>
+                   
+            <!--     <apex:pageBlock rendered="{!edit}" >
+                       <apex:pageBlockButtons >
+                            
+                       </apex:pageBlockButtons>
+              
+                 </apex:pageBlock>
+      		-->
+    </apex:form>
+</apex:page>

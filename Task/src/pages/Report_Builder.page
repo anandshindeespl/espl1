@@ -1,0 +1,89 @@
+<apex:page id="page" standardController="Report" extensions="ReportBuilder">
+    <apex:form id="form" >
+
+    <script>
+        var robject1;
+        function callToFields(obj){
+        robject1=obj;
+        getFields(obj);
+        }
+        
+        function displayResult() { 
+            
+            var x = document.getElementById("page:form:pb:pbs:msp:j_id10:multiselectPanel:rightList");
+            var txt =' ';
+            var i;
+            for (i = 0; i < x.length; i++) {
+                if(i == x.length -1)
+                    txt = txt +x.options[i].value;
+                else
+                    txt = txt +x.options[i].value+', ';
+            }
+            
+            alert(txt);
+            getSQL(txt,robject1);
+            return false;
+        }
+    </script>
+    
+    <apex:actionFunction name="getSQL" action="{!getQuery}" reRender="form">
+        <apex:param name="pvalue2"  value="" />
+        <apex:param name="pvalue"   value="" />
+    </apex:actionFunction>
+    
+    <apex:actionFunction name="getFields" action="{!getAllFields}">
+        <apex:param name="robject" value=""/>
+    </apex:actionFunction>
+    
+    <apex:pageblock id="pb" >
+        <apex:pageBlockSection id="pbs" title="Report Configuration">
+            Select Object <apex:SelectList onchange="callToFields(this.value)" value="{!robject}" size="1">
+                 <apex:selectOptions value="{!Name}"></apex:selectOptions>
+            </apex:SelectList>
+                   Select Fields <c:MultiselectPicklist id="msp" 
+                   leftLabel="Available Fields"
+                   leftOptions="{!allsFields}" 
+                   rightLabel="Selected Fields"
+                   rightOptions="{!selectedfields}"
+                   size="14"
+                   width="150px"/> 
+        </apex:pageBlockSection>
+        
+    </apex:pageblock>
+    
+        <apex:pageBlock id="rpb">
+            <apex:pageBlockSection title="Dynamic Query Builder" columns="2" >
+            
+                Maximum Records To Display  <apex:selectList multiselect="false" size="1" value="{!pickvalue}">
+                                                <apex:selectOptions value="{!NumberOfRecords}"></apex:selectOptions>
+                                            </apex:selectList>
+                
+                <apex:selectRadio id="displayOrder" value="{!radValue}" >
+                      <apex:selectOption itemLabel="Ascending" itemValue="Order By Id ASC " />
+                      <apex:selectOption itemLabel="Descending" itemValue="Order By Id DESC" />
+                </apex:selectRadio>
+                
+                     <apex:commandButton value="Get Query" onclick="return displayResult()" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        <apex:pageBlock rendered="true" title="Query Display Block">
+              <apex:pageBlockSection columns="2">
+              {!sQuery}
+              
+              </apex:pageBlockSection>
+              
+               
+          <apex:pageBlockSection title="Records" > 
+           <apex:commandButton value="get Records" action="{!getRecords}"/>
+              
+              <apex:pageBlockTable title="{!robject}" value="{!recList}" var="rec" id="recordsLst">
+                  <apex:column >
+                      <apex:commandLink value="{!rec.id}" action="https://ap2.salesforce.com/{!rec.id}" />
+                  </apex:column>
+              </apex:pageBlockTable>
+          </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+</apex:form>
+</apex:page>

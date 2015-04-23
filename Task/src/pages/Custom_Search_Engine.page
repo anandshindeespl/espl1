@@ -1,0 +1,9 @@
+<apex:page >
+     <apex:form >
+         <apex:pageBlock title="Custom Search Engine">
+            <apex:pageBlockSection >
+                Search Here<apex:inputField style="width:400px"/>
+            </apex:pageBlockSection>
+         </apex:pageBlock>
+     </apex:form>
+</apex:page>

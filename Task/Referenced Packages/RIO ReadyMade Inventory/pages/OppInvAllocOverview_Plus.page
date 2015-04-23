@@ -1,0 +1,53 @@
+<apex:page standardController="Opportunity" tabStyle="Opportunity" extensions="readymade_inv.OppInvAllocOverview_VF_Ctrl_Plus" action="{!ileToList}" title="Opportunity Inventory Allocation Overview">
+
+    <style type="text/css">
+        .tblLabel {padding:0 20px 0 6px; font-size: .9em; font-weight: bold;}
+    </style>
+
+    <apex:form >
+    <apex:pageBlock title="Opportunity Inventory Allocation" mode="view">
+
+        <apex:pageMessages />
+        <div style="height: 20px" />
+        
+        <apex:pageBlockTable value="{!MatchingInvAllocationEntry}" var="item" title="Warehouse with existing allocation for the Product" columnsWidth="15%,20%,8%,8%,10%,10%,10%,10%,9%" rendered="{!NOT(expired) && paid}">                      
+            <apex:column headerValue="Product">
+                <apex:outputField value="{!item.Inventory__r.Product__r.Name}"/>             
+            </apex:column>
+            <apex:column headerValue="Warehouse">
+                <apex:outputField value="{!item.Inventory__r.Warehouse_Location__r.Name}"/>              
+            </apex:column>
+            <apex:column headerValue="Area">
+                <apex:outputField value="{!item.Inventory__r.Warehouse_Location__r.readymade_inv__Area__c}"/>              
+            </apex:column>
+            <apex:column headerValue="Zone">
+                <apex:outputField value="{!item.Inventory__r.Warehouse_Location__r.readymade_inv__Zone__c}"/>              
+            </apex:column>
+            <apex:column headerValue="Quantity on Hand">
+                <apex:outputField value="{!item.Inventory__r.readymade_inv__Qty_on_Hand__c}"/>
+            </apex:column>
+            <apex:column headerValue="Quantity Allocated">
+                <apex:outputField value="{!item.Inventory__r.readymade_inv__Qty_allocated__c}"/>
+            </apex:column>
+            <apex:column headerValue="Quantity Available">
+                <apex:outputField value="{!item.Inventory__r.readymade_inv__Qty_available__c}"/>
+            </apex:column>
+            <apex:column headerValue="Quantity Assigned">
+                <apex:outputField value="{!item.readymade_inv__Quantity__c}"/>
+            </apex:column>
+            <apex:column headerValue="Status">
+                <apex:outputField value="{!item.readymade_inv__Status__c}"/>
+            </apex:column>
+        </apex:pageBlockTable>
+        
+        <apex:pageBlockSection rendered="{!expired}">
+        	<apex:pageMessage summary="RIO Inventory have expired! Please contact WDCi to renew the license key" severity="warning" strength="3" />
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection rendered="{!NOT(expired) && NOT(paid)}">
+            <apex:pageMessage summary="This page is only applicable to RIO Inventory Plus with the enhanced multi location inventory functionality. Please contact WDCi to find out more" severity="warning" strength="3" />
+        </apex:pageBlockSection>
+        
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

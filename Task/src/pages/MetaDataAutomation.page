@@ -1,0 +1,160 @@
+<apex:page controller="MetaDataAutomationHandler">
+ <style>
+     .button {
+         background-color: #007bb4;
+         background-image: none;
+         color: white;
+         border: 1px solid #007bb4;
+         border-radius: 5px;
+         width: auto;
+         min-width: 75px;
+         height: 25px;
+         cursor: pointer;
+         font-weight: normal;
+         font-size: 12px;
+         margin-left: 120px;
+     }
+     .setFont {
+         font-family: Arial;
+         font-size: 14px;
+         font-weight: bold;
+         color: black;
+     }
+     .pbSubsection {
+         margin-top: 7px !important;
+         padding: 5px 12px !important;
+         padding-left: 115px !important;
+     }
+     .overlayStatus
+     {
+         position:fixed;
+         left:0;
+         top:0;
+         width:100%;
+         height:100%;
+         text-align:center;
+         vertical-align: middle;
+         background-color: #dcdcdc;
+         opacity:0.6;
+         filter:alpha(opacity=60);
+         z-index: 20 ;
+     }
+     .loadIMG
+     {
+      position : absolute;    
+       width:30px;
+       height:30px;
+       left:50%;
+       top:50%;
+       margin-left:-100px;
+       margin-top:-60px;         
+     }
+
+     .loadLabel
+     {
+         position : absolute;
+         font-weight:bold;
+         font-size:14px;
+         left:50%;
+         top:50%;
+         margin-left:-100px;
+         margin-top:-30px;
+         color:black;
+         align:center;
+     }  
+     .errorMsg1 {
+         color: #d74c3b;
+     }
+     .textStyle
+     {
+         font-size : 12px;
+         font-family:Arial;
+         font-weight : bold;
+         color:black;
+     }
+    </style>
+    
+ <apex:form id="frmMetaDataAutomation" >
+    <apex:pageMessages id="ErrorMsg"/>
+    <apex:actionFunction name="RunAutomationClass" action="{!runMetaDataSetUp}" 
+                         reRender="frmMetaDataAutomation" 
+                         oncomplete="setStyleClass();redirectToHomePage();" 
+                         status="processStatus"/>
+    <apex:actionStatus id="processStatus" layout="block">           
+             <apex:facet name="start" >
+             <apex:outputpanel Styleclass="overlayStatus">
+                   <img src="/img/loading32.gif"  Class="loadIMG"/>
+                   <Label  Class="loadLabel">Processing...</Label>                                 
+             </apex:outputpanel>
+             </apex:facet>       
+     </apex:actionStatus>
+     
+    <apex:pageBlock mode="edit" title="Meta Data Automation" id="metadataInputs" >                           
+         <apex:outputPanel id="InputDiv" rendered="{!NOT(isSubmitted)}">
+            <table align="center" cellpadding="5" cellspacing="5">
+               <tr>
+                 <td> 
+                    <apex:outputText value="Select Static Resource" styleClass="textStyle"/>
+                 </td>  
+                 <td><div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                            <apex:inputtext value="{!strStaticResourceName}" styleclass="inpFolder"/>
+                            <div class="errorMsg1"><strong>Error:</strong> You must enter a value</div>
+                        </div>
+                  </td>
+                </tr>
+                <tr>
+                     <td>
+                        <apex:outputText value="First Run" styleClass="textStyle"/>
+                     </td>
+                     <td>
+                        <apex:selectList value="{!strChoice}" size="1">
+                            <apex:selectOptions value="{!FirstRunOption}"/>
+                        </apex:selectList>
+                     </td>
+                </tr>
+             </table>
+         </apex:outputPanel>
+         <apex:pageBlockButtons location="Bottom" rendered="{!NOT(isSubmitted)}">
+                        <apex:commandButton value="Run"  onclick="return validate();" styleClass="button" 
+                                            status="processStatus" rerender="ErrorMsg,metadataInputs" 
+                                            oncomplete="redirectToHomePage();"/>
+         </apex:pageBlockButtons>
+        
+         <apex:pageBlockSection rendered="{!isSubmitted}">
+                    <apex:outputText value="MetaDataAutomation started successfully.." styleClass="setFont"/>
+                    <apex:outputLink onclick="redirect();" >Click Here to go to start page.</apex:outputLink> 
+         </apex:pageBlockSection> 
+     </apex:pageBlock>   
+     
+     <script>
+            function redirectToHomePage(){
+                if({!isSubmitted})
+                    setInterval(redirect,10000);
+            }
+            function redirect(){
+                location.reload(true);      
+            }
+        </script> 
+ </apex:form>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>    
+    <script>
+    $(document).ready(function(){
+        setStyleClass();
+    });
+    function setStyleClass(){
+        $(".button").removeClass("btn");
+        $(".errorMsg1").css("display","none");
+    }
+    function validate(){
+        var fld = $(".inpFolder").val();
+        if(fld == '' || fld == null){
+            $(".errorMsg1").css("display","block");
+            return false;
+        }else {
+            RunAutomationClass();
+            return true;
+        }
+    }
+    </script>
+</apex:page>

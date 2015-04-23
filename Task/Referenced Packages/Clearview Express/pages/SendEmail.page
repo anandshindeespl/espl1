@@ -1,0 +1,74 @@
+<apex:page controller="clearview.SendEmail">
+	<apex:stylesheet value="{!URLFOR($Resource.clearview__redactor7_7,'redactor/css/redactor.css')}"/>
+	<style type="text/css">
+		input.emailField { width: 250px }
+		body .bPageBlock .pbBody td.first { width: 150px }
+	</style>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script  type="text/javascript">jQuery.noConflict();</script>
+	<script type="text/javascript" src="{!URLFOR($Resource.redactor7_7,'redactor/redactor.min.js')}"></script>
+	
+	<apex:sectionHeader title="Send Packet" subtitle="{!name}" />
+	
+	<apex:form id="sendEmail">
+		
+		<apex:pageBlock id="emailBlock">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!Send}" value="Send"/>
+				<apex:commandButton action="{!Cancel}" value="Cancel"/>
+			</apex:pageBlockButtons>
+			
+			<apex:pageBlockSection id="emailFields" columns="2">
+				<apex:selectList label="Packet Email" value="{!packetEmail}" size="1" styleClass="firstCol" style="float: left">
+					<apex:selectOptions value="{!emails}"/>
+					
+					<apex:actionSupport event="onchange" action="{!updateEmail}" status="loading_status"/>
+				</apex:selectList>
+
+				<apex:inputText styleClass="emailField" value="{!emailFrom}" label="From" id="from" disabled="true"/>
+				<apex:inputText styleClass="emailField,firstCol" value="{!emailTo}" label="To" id="to" disabled="true"/>
+				<apex:inputText styleClass="emailField" value="{!emailBCC}" label="BCC" id="bcc"/>
+				<apex:inputText styleClass="emailField" value="{!emailCC}" label="CC" id="cc"/>
+				
+			</apex:pageBlockSection>
+			
+		<apex:pageBlockSection id="attachments" columns="1">
+		<br/>
+			 
+			<apex:outputLabel value="Select a file to attach" for="attachBtn" style="padding-left: 18%"/>
+			<apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="inputFile1" style="padding-left: 18%"/>
+            <apex:outputLabel value="You may attach multiple files, one at a time." for="attachBtn" style="padding-left: 18%"/>
+            
+            
+            <apex:commandButton status="uploading" action="{!saveAttachment}" value="Attach File" id="attachBtn" style="margin-left:18%"/>
+           
+            
+			
+		
+        </apex:pageBlockSection>
+           
+            <apex:pageBlockSection id="attachmentList" columns="1">
+            <apex:pageBlockTable value="{!newAttachments}" var="attachment" title="Existing Files" rendered="{!hasAttachments}"  style="margin-left: 18%; margin-top:15px;width:250px" >
+                <apex:column headerValue="Files attached:" value="{!attachment.Name}" />
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>     
+            
+            
+        	
+			<apex:pageBlockSection id="emailContent" columns="1">
+				<apex:inputText value="{!emailSubject}" styleClass="emailField,firstCol" style="width: 100%" label="Subject" id="subject"/>
+				<apex:inputTextarea value="{!emailBody}" label="Body" id="body" styleClass="firstCol" style="width: 100%" rows="30"/>
+				<script type="text/javascript">
+					jQuery("[id='{!$Component.sendEmail.emailBlock.emailContent.body}']").redactor();
+				</script>
+			</apex:pageBlockSection>
+			
+			
+		</apex:pageBlock>
+		
+	</apex:form>
+	
+	<script type="text/javascript">
+		jQuery("span[id*='loading_status.start']").css({ "position": "relative", "top": "2px", "left": "5px"});
+	</script>
+</apex:page>

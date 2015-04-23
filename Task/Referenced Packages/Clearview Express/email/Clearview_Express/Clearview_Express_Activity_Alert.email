@@ -1,0 +1,71 @@
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="690">
+			<tbody>
+				<tr>
+					<td bgcolor="#504A4B" height="10">
+		
+		
+		<table align="center" border="0" cellpadding="0" cellspacing="0" width="670">
+			<tbody>
+			<tr>
+					<td bgcolor="#504A4B" height="10">
+			</td>
+			</tr>
+			
+				<tr>
+					<td bgcolor="#EBEBEB" height="130">
+						<table align="center" border="0" cellpadding="5" cellspacing="5" width="665">
+							<tbody>
+								<tr>
+									<td align="left">
+										<span class="logo"><img height="90" src="http://clearviewexpress.com/images/Clearview-Logo-transparent-250.png" style="width: 241px; height: 90px; " width="231" /></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+					<tr>
+					<td align="center" bgcolor="#FFFFFF">
+						<table border="0" cellpadding="0" cellspacing="0" width="478">
+							<tbody>
+								<tr>
+									<td>
+										&nbsp;</td>
+								</tr>
+								<tr>
+									<td align="left" class="testo">
+										<div align="justify">
+											<p>
+												Attention {!Lead.OwnerFullName}{!Contact.OwnerFullName},</P>
+
+<p>You have a Clearview Express Activity Alert!</p> 
+<p><b>{!Lead.FirstName}{!Contact.FirstName} {!Lead.LastName}{!Contact.LastName} just opened the Ownership Packet.</b></p>  
+<p>You sent the Packet originally on: 5/31/2012 9:58 AM</p>
+<p>The Package has been opened {!Visitor__c.Total_Visits__c} times</p>
+<p>The lead file can be reached here: {!Lead.Link}{!Contact.Link}</p><br>
+<p><i>Clearview Express Alerts are designed to help you prioritize your daily follow up. Spend less time searching for those leads who might be interested and more time actually talking with those who are.</i></p>
+
+<p>Good luck!</p>
+
+
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										&nbsp;</td>
+								</tr>
+								<tr>
+									<td>
+										&nbsp;</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+					</td>
+				</tr>
+				<tr><td bgcolor="#504A4B" height="10"> </td></tr>
+			</tbody>
+		</table>

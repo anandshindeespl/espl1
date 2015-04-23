@@ -1,0 +1,20 @@
+<apex:page controller="readymade_inv.ReadyMadeInventoryConfigurationExtension" action="{!autoRedirect}" title="RIO Inventory Configuration Wizard" tabStyle="ReadyMade_Configuration__tab">
+<apex:form >
+        <div align="left" style="background-image: url({!$Resource.rio_readymade_inventory_background});background-repeat: repeat-x;" >
+            <a href="http://www.wdcigroup.net" target="_blank">
+                <apex:image id="theImage" value="{!$Resource.readymade_inv__rio_readymade_inventory_wdci_logo}" style="align:left"/>
+            </a>
+        </div>
+        <br/>
+        <apex:pageBlock title="RIO ReadyMade Inventory Configuration">
+            <apex:pageMessages rendered="true"/>
+			<!-- <apex:pageBlockButtons location="bottom">
+				<apex:commandButton action="{!importConfig}" value="Yes"/>
+            	<apex:commandButton action="{!freshConfig}" value="No"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection id="oldConfig" rendered="{!oldConfig}" columns="2">
+            	<apex:pageMessage summary="RIO Inventory 1.5 Configuration Found! Import configuration from 1.5 into 1.6?" severity="WARNING" strength="3"/><br/>
+            </apex:pageBlockSection> -->
+		</apex:pageBlock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Visitor__c$Name</field>
+    </columns>
+    <columns>
+        <field>Visitor__c.Visits__r$Name</field>
+    </columns>
+    <columns>
+        <field>Visitor__c.Visits__r.Visitor_Actions__r$Name</field>
+    </columns>
+    <description>Content Summary</description>
+    <filter>
+        <criteriaItems>
+            <column>Visitor__c.Visits__r.Visitor_Actions__r$Package__c</column>
+            <operator>notEqual</operator>
+            <value></value>
+        </criteriaItems>
+        <language>en_US</language>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Visitor__c.Visits__r.Visitor_Actions__r$Package__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Visitor__c.Visits__r.Visitor_Actions__r$Title__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Visitor__c.Visits__r.Visitor_Actions__r$RecordType</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Package Content Summary</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Visitors_with_Visits_with_Visitor_Actions__c</reportType>
+    <scope>organization</scope>
+    <showDetails>false</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Visitor__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CURRENT</interval>
+    </timeFrameFilter>
+</Report>

@@ -1,0 +1,39 @@
+<apex:page standardController="Student__c" extensions="StrudentRegistration" language="{!lang}">
+   <apex:form id="stud">
+           
+   
+      <apex:pageBlock title="Student Registration Form" rendered="{!varT}">
+			 <apex:selectList id="Pickvalue" value="{!pickvalue}" multiselect="false" size="1">
+				<apex:selectOption itemValue="en_US" itemLabel="English"/>
+				<apex:selectOption itemValue="es" itemLabel="Spanish"/>
+				<apex:selectOption itemValue="fr" itemLabel="French"/>
+				
+			</apex:selectList>
+				<apex:commandButton value="Change Language" action="{!changeLanguage}" />
+      
+      
+           <apex:pageBlockButtons >
+               <apex:commandLink value="save" action="{!saveStudent}" reRender="details"/>
+           </apex:pageBlockButtons>
+                <apex:pageBlockSection title=" Fill the Registration Details" columns="2" >
+                      <apex:inputField value="{!student.Name}"  />
+                      <apex:inputField value="{!student.Roll_number__c}"  />
+                      <apex:inputField value="{!student.Course_Applying_for__c}"  />
+                      <apex:inputField value="{!student.Gender__c}"  />
+                      <apex:inputField value="{!student.S_S_C__c}"  />
+                      <apex:inputField value="{!student.H_S_C__c}"  />
+                      <apex:inputField value="{!student.State__c}"  />
+                      <apex:inputField value="{!student.Country__c}"  />
+                     
+                </apex:pageBlockSection>    
+        </apex:pageBlock> 
+        
+        
+        <apex:pageBlock id="details" rendered="{!varF}" >
+               <apex:pageMessage severity="info" 
+               strength="1" 
+               summary="{!$Label.SaveMessage}" />
+         </apex:pageBlock>   
+   </apex:form>
+
+</apex:page>

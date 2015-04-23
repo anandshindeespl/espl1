@@ -1,0 +1,36 @@
+<apex:page standardController="Campaign" extensions="CampaignsActivity" >
+  <apex:form id="CampaignPage">
+
+    <apex:pageBlock >
+            
+            <apex:selectList id="Pickvalue" value="{!pickvalue}" multiselect="false" size="1">
+            <apex:selectOption itemValue="Recently Modified" itemLabel="Recently Modified"/>
+            <apex:selectOption itemValue="All Campaigns" itemLabel="All Campaigns"/>
+            <apex:selectOption itemValue="All Active Campaigns" itemLabel="All Active Campaigns"/>
+            
+            <apex:selectOption itemValue="Inactive Campaigns" itemLabel="Inactive Campaigns"/>
+            <apex:actionSupport event="onchange" action="{!creatUser}" rerender="recBlock"/>
+                
+            </apex:selectList>
+            <apex:commandButton value="View" action="{!creatUser}" rerender="recBlock"/>    
+            </apex:pageBlock>
+ 
+    <apex:pageBlock id="recBlock" title="User Driven Campaign">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="First" action="{!firstPage}" rerender="recBlock"/>
+                <apex:commandButton value="Previous" action="{!previousPage}" rerender="recBlock"/>
+                <apex:commandButton value="Next" action="{!nextPage}" rerender="recBlock"/>
+                <apex:commandButton value="Last" action="{!lastPage}" rerender="recBlock"/>
+            </apex:pageBlockButtons>
+                <apex:pageBlockTable value="{!camplist}" var="rec">
+                    <apex:column headerValue="Campaign Name">
+                    <apex:outputLink value="https://c.ap2.visual.force.com/apex/Campaign_Detail?campid={!rec.Id}" id="id"> {!rec.Name} </apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="Status" value="{!rec.Status}"/> 
+                    <apex:column headerValue="Start Date" value="{!rec.StartDate}"/> 
+                </apex:pageBlockTable>
+
+    </apex:pageBlock>
+
+    </apex:form>
+</apex:page>

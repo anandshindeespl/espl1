@@ -1,0 +1,791 @@
+<apex:page sidebar="false" controller="clearview.saUITrack">
+<apex:pageMessages />
+<style type="text/css">
+	.green { color: #007000 }
+    h1.pbHeader, h2.pbHeader, h3.pbHeader {margin: 7px 12px !important; display: block; border: none !important; font-size: 1.3em;}
+    div.generated_tracking {background: #ffffff; border: 1px solid #cccccc; padding: 5px;}
+    pre { white-space: pre-wrap; white-space: -moz-pre-wrap !important; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }
+    pre.generated_tracking {width: 100%; margin: 0; font-size: 12px}
+    div.apexp {display: none}
+	div#advanced_options {display: none}
+	#sidebarDiv .sidebarModule {background: url('/img/alohaSkin/sidebar_search.png') repeat-x scroll center top #FFFFFF; }
+	#sidebarDiv .sidebarModule .sidebarModuleHeader a { color: #ffffff; text-decoration: none }
+	#sidebarDiv .sidebarModule .sidebarModuleHeader a:hover { color: #015BA7 }
+	#sidebarDiv .sidebarModule .sidebarModuleBody { min-height: 77px; height: auto !important; height: 77px; }
+	#sidebarDiv .sidebarModule .sidebarModuleBody ul { margin: 0px; padding-left: 0px; list-style-type: none}
+</style>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+<script type="text/javascript">
+    var jQ = '&lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"&gt;&lt;/script&gt;';
+    
+    function basic_tracking(options) {
+        var settings = jQuery.extend({
+            record_type: "",
+            campaigns: "",
+            package: ""
+        }, options);
+        
+        var JS;
+        
+        JS = '<pre id="tracking_code" class="generated_tracking">' +
+        '&lt;script type="text/javascript"&gt;' + '\n' +
+        '\tvar saTracker;' + '\n' +
+        '\tjQuery.getScript("';
+        
+        if(jQuery("span[class=buildEnv]").length > 0) {
+        	JS += 'http://{!URLENCODE(SubDomain)}.' + jQuery("span[class=buildEnv]").html() + '.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS'; 
+        } else {
+        	JS += 'http://{!URLENCODE(SubDomain)}.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS'; 
+        }
+        
+        JS += '", function() {\n' +
+        '\t\tsaTracker = new jQuery.sa();' + '\n' +
+        '\t\tsaTracker.eventTrack(';
+        
+        JS += '{type: "{!EventPageVisit}"';
+        
+        if(typeof settings.campaigns == "object") {
+            if(settings.campaigns.length > 0) {
+                for(var c in settings.campaigns) {
+                    //console.log(settings.campaigns[c].indexOf('701'));
+                    if(settings.campaigns[c].indexOf('701') >= 0) {
+                        JS += ', campaign: "' + settings.campaigns[0] + '"';
+                    }
+                }
+            }
+        }
+        
+        if(typeof settings.package == "string") {
+        	JS += ', pckge: "' + settings.package + '"'; 
+        }
+        
+        JS += ', success: function() {\n' +
+        '\t\t\tif(saTracker.query("src") == "em") {\n' +
+        '\t\t\t\tsaTracker.eventTrack({type: "{!EventEmailClickthrough}"';
+        
+        if(typeof settings.campaigns == "object") {
+            if(settings.campaigns.length > 0) {
+                for(var c in settings.campaigns) {
+                    //console.log(settings.campaigns[c].indexOf('701'));
+                    if(settings.campaigns[c].indexOf('701') >= 0) {
+                        JS += ', campaign: "' + settings.campaigns[0] + '"';
+                    }
+                }
+            }
+        }
+        
+        if(typeof settings.package == "string") {
+        	JS += ', pckge: "' + settings.package + '"'; 
+        }
+        
+        JS += '});\n' +
+        '\t\t\t}\n' + 
+        '\t\t}});\n' +
+        '\t});\n';
+        
+        JS += '&lt;/script&gt;' + '</pre>';
+        
+        return JS;
+    }
+    
+    function salytics_library() {   	
+    	if(jQuery("span[class=buildEnv]").length > 0) {
+        	return '&lt;script type="text/javascript" src="' + 'http://{!URLENCODE(SubDomain)}.' + jQuery("span[class=buildEnv]").html() + '.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS' + '"&gt;&lt;/script&gt;'; 
+        } else {
+        	return '&lt;script type="text/javascript" src="' + 'http://{!URLENCODE(SubDomain)}.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS' + '"&gt;&lt;/script&gt;'; 
+        }
+    }
+    
+    function linking_code(options) {
+    	var settings = jQuery.extend({
+            record_type: "",
+            campaigns: ""
+        }, options);
+        
+        var JS;
+        
+        JS = '<pre id="linking_code" class="generated_tracking">&lt;script type="text/javascript"&gt;\n' +
+        '\tvar saTracker;' + '\n';
+        
+        
+        JS += '\tjQuery(document).ready( function() {\n' +
+		
+		'\t\tjQuery.getScript("'
+        
+        if(jQuery("span[class=buildEnv]").length > 0) {
+        	JS += 'http://{!URLENCODE(SubDomain)}.' + jQuery("span[class=buildEnv]").html() + '.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS'; 
+        } else {
+        	JS += 'http://{!URLENCODE(SubDomain)}.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS'; 
+        }
+        
+        JS += '", function() {\n' +
+        '\t\t\tsaTracker = new jQuery.sa();\n' +
+        '\t\t\tsaTracker.eventTrack(';
+        
+        JS += '{type: "' + settings.record_type + '"';
+        
+        if(typeof settings.campaigns == "object") {
+            if(settings.campaigns.length > 0) {
+                for(var c in settings.campaigns) {
+                    //console.log(settings.campaigns[c].indexOf('701'));
+                    if(settings.campaigns[c].indexOf('701') >= 0) {
+                        JS += ', campaign: "' + settings.campaigns[0] + '"';
+                    }
+                }
+            }
+        }
+        
+        if(typeof settings.package == "string") {
+        	JS += ', pckge: "' + settings.package + '"'; 
+        }
+        
+        JS += '});\n\n' +
+        
+        '\t\t\tjQuery("#email").change( function() {\n' +
+        '\t\t\t\tsaTracker.linkEmail({ email: this.value })\n' +
+        '\t\t\t});' + '\n';
+        
+        JS += '\t\t});\n\n' +
+		
+		'\t});\n';
+        
+        JS += '&lt;/script&gt;\n</pre>';
+        
+        return JS;
+    }
+    
+    
+    function update_tracking() {
+        var campaigns = new Array();
+        var package;
+        var emailPackage;
+        
+        jQuery("div[id*=campaign_div]").each(function() {
+            var number = this.id.substr(12);
+            var input = "Campaign" + number + "_lkid";
+            
+            campaigns.push(jQuery("#"+input+"").val());
+        });
+        
+        package = jQuery("#Package_lkid").val() != "000000000000000" ? jQuery("#Package_lkid").val() : null;
+        emailPackage = jQuery("#emailPackage_lkid").val() != "000000000000000" ? jQuery("#emailPackage_lkid").val() : null;
+        
+        //jQuery("pre#salytics_code").html(salytics_library());
+        
+        jQuery("div#tracking_code").html(basic_tracking({record_type: jQuery("#event").val(), campaigns: campaigns, package: package}));
+        
+        jQuery("div#linking_code").html(linking_code({record_type: jQuery("#event").val(), campaigns: campaigns, package: package}));
+        
+        jQuery("div#emailTracking_code").html(emailTracking({package: emailPackage}));
+    }
+    
+    function trackingReference_instantiate() {
+    	var JS = '<pre id="trackingReference_instantiate" class="generated_tracking">\n';
+    	JS += jQ;
+    	
+    	JS += '\n\n&lt;script type="text/javascript"&gt;' + '\n' +
+    	'\tvar saTracker;' + '\n' +
+    	'\tjQuery.getScript("';
+        
+        if(jQuery("span[class=buildEnv]").length > 0) {
+        	JS += 'http://{!URLENCODE(SubDomain)}.' + jQuery("span[class=buildEnv]").html() + '.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS'; 
+        } else {
+        	JS += 'http://{!URLENCODE(SubDomain)}.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS'; 
+        }
+        
+        JS += '", function() {\n' +
+        '\t\tsaTracker = new jQuery.sa();' + '\n' +
+        '\t});\n' +
+    	'&lt;/script&gt;' + '</pre>';
+    	
+    	return JS;
+    }
+    
+    function eventTrackBasic() {
+    	var JS = '<pre id="trackingReference_instantiate" class="generated_tracking">\n';
+    	
+    	JS += 'var saTracker = new jQuery.sa();\n' +
+        'saTracker.eventTrack({type: "{!EventPageVisit}"});\n' +
+    	'</pre>';
+    	
+    	return JS;
+    }
+    
+    function eventTrackAdvanced() {
+    	var JS = '<pre id="trackingReference_instantiate" class="generated_tracking">\n';
+    	
+    	JS += 'var saTracker = new jQuery.sa();\n' +
+        'saTracker.eventTrack({type: "{!EventPageVisit}", campaign: "701000000000000", url: "http://www.clearview.com/sfdc", ref: "http://www.clearview.com/sfdccampaign", email: "george@acme.com", success: function() {\n' +
+        '\talert("page visit has been tracked to Salesforce.com");\n' +
+        '}});\n' +
+    	'</pre>';
+    	
+    	return JS;
+    }
+    
+    function emailTracking(options) {
+    	var settings = jQuery.extend({
+            package: ""
+        }, options);
+        
+    	var JS;
+        
+        JS = '<pre id="email_tracking" class="generated_tracking">' +
+        '&lt;script type="text/javascript"&gt;' + '\n' +
+        '\tvar saTracker;' + '\n' +
+        '\tjQuery.getScript("';
+        
+        if(jQuery("span[class=buildEnv]").length > 0) {
+        	JS += 'http://{!URLENCODE(SubDomain)}.' + jQuery("span[class=buildEnv]").html() + '.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS'; 
+        } else {
+        	JS += 'http://{!URLENCODE(SubDomain)}.{!URLENCODE(Host)}.force.com/{!URLENCODE(Path)}/apex/clearview__saJS'; 
+        }
+        
+        JS += '", function() {\n' +
+        '\t\tsaTracker = new jQuery.sa();' + '\n' +
+        '\n\t\t\/\/track page view' + '\n' +
+        '\t\tsaTracker.eventTrack({';
+        
+        JS += 'type: "{!EventPageVisit}"';
+        
+        if(typeof settings.package == "string") {
+        	JS += ', pckge: "' + settings.package + '"'; 
+        }
+        
+        JS += ', success: function() {\n' +
+        '\n\t\t\t\/\/track email clickthrough' + '\n' +
+        '\t\t\tif(saTracker.query("src") == "em") {' + '\n' +
+        '\t\t\t\tsaTracker.eventTrack({';
+        
+        
+        
+        
+        JS += 'type: "{!EventEmailClickthrough}"';
+        
+        if(typeof settings.package == "string") {
+        	JS += ', pckge: "' + settings.package + '"'; 
+        }
+        
+        JS += '});\n' +
+        '\t\t\t}\n' +        
+        '\n\t\t}});\n' +        
+        '\t});\n';
+        
+        JS += '&lt;/script&gt;' + '</pre>';
+        
+        return JS;
+    }
+    
+    jQuery(document).ready(function() {
+        
+        jQuery("#generate, #emailGenerate").click(function() {
+            update_tracking();
+            
+            return false;
+        });
+        
+        update_tracking();
+        
+        jQuery("#advanced").click(function() {
+        	if(jQuery("#advanced_options").css("display") != "none") {
+        		jQuery("#advanced_options").hide();
+        	} else {
+        		jQuery("#advanced_options").css("display","inline");
+        	}
+        });
+        
+        //enable links
+        var links = jQuery("td#bodyCell").children("div");
+        links[0].style.display = "inline";
+        jQuery(".tracking_link").click( function() {
+        	links.hide();
+        	var link =  this.href;
+        	jQuery(link.substring(link.indexOf("#"))).show();
+        })
+        
+        jQuery("div#trackingReference_instantiate").html(trackingReference_instantiate());
+        jQuery("div#eventTrackBasic").html(eventTrackBasic());
+        jQuery("div#eventTrackAdvanced").html(eventTrackAdvanced());
+    });
+</script>
+
+<table style="width: 100%">
+	<tr>
+		<td	id="sidebarCell" class="sidebarCell" valign="top">
+			<div id="sidebarDiv" class="fixed">
+				<div class="sidebarModule">
+					<div class="sidebarModuleHeader">
+						<h2><a href="#gettingStarted" class="tracking_link">Getting Started</a></h2>
+					</div>
+				</div>
+				<div class="sidebarModule">
+					<div class="sidebarModuleHeader">
+						<h2><a href="#emailTracking" class="tracking_link">Email Tracking</a></h2>
+					</div>
+				</div>
+				<div class="sidebarModule">
+					<div class="sidebarModuleHeader">
+						<h2><a href="#trackingReference" class="tracking_link">Tracking Reference</a></h2>
+					</div>
+					<div class="sidebarModuleBody">
+						<ul>
+							<li><a href="#eventTrack" class="tracking_link">eventTrack</a></li>
+							<li><a href="#linkEmail" class="tracking_link">linkEmail</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</td>
+		<td id="bodyCell" class="oRight" valign="top">
+			
+			<!-- Getting Started Section -->
+			<div id="gettingStarted" class="apexp">
+						<table style="width: 100%">
+						    <tr>
+						        <td>
+						            <div class="bPageBlock apexDefaultPageBlock">
+						            
+						            <h1 class="pbHeader">Getting Started</h1>
+						            
+						            <div class="pbBody" style="clear: both; padding-top: 10px;">
+						                To add visitor tracking to your website, please follow these steps. 
+						            </div>
+						            
+						            
+						            <!-- STEP 1: jQuery Addition -->
+						            <div class="pbBody" style="clear: both">
+						            	<div class="pbSubheader tertiaryPalette">
+						            		<h3>Step 1: Add jQuery</h3>
+						            	</div>
+						            </div>
+						            
+						            <div class="pbBody" style="clear: both; padding-top: 10px;">
+						                Ensure the jQuery library is included on your pages.  If it is not currently, you may add it by using the following code: 
+						            </div>
+						            <div class="pbBody">
+						                <div id="jQuery_code" class="generated_tracking">
+						                	<pre id="jQuery_code" class="generated_tracking">&lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"&gt;&lt;/script&gt;</pre>
+						                </div>
+						            </div>
+						             
+						            
+						            <!-- STEP 2: Add Tracking -->
+						            <div class="pbBody" style="clear: both">
+						            	<div class="pbSubheader tertiaryPalette">
+						            		<h3>Step 2: Add tracking code</h3>
+						            	</div>
+						            </div>
+						            
+						            <div class="pbBody" style="clear: both; padding-top: 10px;">
+						                Select options below and add the generated code to your pages for tracking.
+						            </div>
+						            
+						            <div id="track_options" class="pbBody">
+						                <table style="float: left">
+						                    <!--<tr id="campaign_row">
+						                        <div id="campaign_div1">
+						                            <td>Campaign</td>
+						                            <td>
+						                                <input id="Campaign1_lkid" type="hidden" value="000000000000000" name="Campaign1_lkid" />
+						                                <input id="Campaign1_lkold" type="hidden" value="null" name="Campaign1_lkold" />
+						                                <input id="Campaign1_lktp" type="hidden" value="701" name="Campaign1_lktp" />
+						                                <input id="Campaign1_lspf" type="hidden" value="0" name="Campaign1_lspf" />
+						                                <input id="Campaign1_lspfsub" type="hidden" value="0" name="Campaign1_lspfsub" />
+						                                <input id="Campaign1_mod" type="hidden" value="0" name="Campaign1_mod" />
+						                                
+						                                <span class="lookupInput">
+						                                    <input type="text" tabindex="1" size="20" onchange="getElementByIdCS('Campaign1_lkid').value='';getElementByIdCS('Campaign1_mod').value='1';" name="Campaign1" maxlength="255" id="Campaign1" onclick="javascript: setLastMousePosition(event); openLookup('/_ui/common/data/LookupPage?lkfm=editPage&lknm=Campaign1&lktp=' + getElementByIdCS('Campaign1_lktp').value,670,'1','&lksrch=' + escapeUTF(getElementByIdCS('Campaign1').value.substring(0, 80)))" readonly="readonly" style="cursor: pointer" />
+						                                    <a title="Campaign Lookup (New Window)" tabindex="1" onclick="setLastMousePosition(event)" id="Campaign1_lkwgt" href="javascript:%20openLookup%28%27%2F_ui%2Fcommon%2Fdata%2FLookupPage%3Flkfm%3DeditPage%26lknm%3DCampaign1%26lktp%3D%27%20%2B%20getElementByIdCS%28%27Campaign1_lktp%27%29.value%2C670%2C%271%27%2C%27%26lksrch%3D%27%20%2B%20escapeUTF%28getElementByIdCS%28%27Campaign1%27%29.value.substring%280%2C%2080%29%29%29">
+						                                        <img title="Campaign Lookup (New Window)" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onblur="this.className = 'lookupIcon';" class="lookupIcon" alt="Campaign Lookup (New Window)" src="/s.gif" />
+						                                    </a>
+						                                </span>
+						                            </td>    
+						                            
+						                        </div>
+						                    </tr>-->
+						                    <tr id="package_row">
+						                        <div id="package_div">
+						                            <td>Package</td>
+						                            <td>
+						                                <input id="Package_lkid" type="hidden" value="000000000000000" name="Package_lkid" />
+						                                <input id="Package_lkold" type="hidden" value="null" name="Package_lkold" />
+						                                <input id="Package_lktp" type="hidden" value="{!PackagePrefix}" name="Package_lktp" />
+						                                <input id="Package_lspf" type="hidden" value="0" name="Package_lspf" />
+						                                <input id="Package_lspfsub" type="hidden" value="0" name="Package_lspfsub" />
+						                                <input id="Package_mod" type="hidden" value="0" name="Package_mod" />
+						                                
+						                                <span class="lookupInput">
+						                                    <input type="text" tabindex="2" size="20" onchange="getElementByIdCS('Package_lkid').value='';getElementByIdCS('Package_mod').value='1';" name="Package" maxlength="255" id="Package" onclick="javascript: setLastMousePosition(event); openLookup('/_ui/common/data/LookupPage?lkfm=editPage&lknm=Package&lktp=' + getElementByIdCS('Package_lktp').value,670,'1','&lksrch=' + escapeUTF(getElementByIdCS('Package').value.substring(0, 80)))" readonly="readonly" style="cursor: pointer" />
+						                                    <a title="Package Lookup (New Window)" tabindex="2" onclick="setLastMousePosition(event)" id="Package_lkwgt" href="javascript:%20openLookup%28%27%2F_ui%2Fcommon%2Fdata%2FLookupPage%3Flkfm%3DeditPage%26lknm%3DPackage%26lktp%3D%27%20%2B%20getElementByIdCS%28%27Package_lktp%27%29.value%2C670%2C%271%27%2C%27%26lksrch%3D%27%20%2B%20escapeUTF%28getElementByIdCS%28%27Package%27%29.value.substring%280%2C%2080%29%29%29">
+																<img title="Package Lookup (New Window)" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onblur="this.className = 'lookupIcon';" class="lookupIcon" alt="Package Lookup (New Window)" src="/s.gif" />
+															</a>
+						                                </span>
+						                            </td>    
+						                            
+						                        </div>
+						                    </tr>
+						                    <tr>
+						                        <td>Event</td>
+						                        <td>
+						                            Page View
+						                            <!--<select id="event" name="event">
+						                                <apex:outputtext escape="false" value="{!events}"></apex:outputtext>
+						                            </select>-->
+						                        </td>
+						                    </tr>
+						                    <tr>
+						                        <td></td>
+						                        <td><input class="btn" type="button" id="generate" value="Generate"  /></td>
+						                    </tr>
+						                </table>
+						            </div>
+						            
+						            <div class="pbBody" style="clear: both; padding-top: 5px">
+						                <div id="tracking_code" class="generated_tracking">
+						                	<pre id="tracking_code" class="generated_tracking">		                	
+						                	</pre>
+						                </div>
+						            </div>
+						            
+						            <!-- STEP 3: Add Linking -->
+						            <!--<div class="pbBody" style="clear: both">
+						            	<div class="pbSubheader tertiaryPalette">
+						            		<h3>Step 3: Optionally add visitor linking</h3>
+						            	</div>
+						            </div>
+						            
+						            <div class="pbBody" style="clear: both; padding-top: 10px;">
+						                If email address is collected on a page, it can be captured to link the visitor to leads and/or contacts in Salesforce.
+						            </div>
+						            
+						            <div class="pbBody" style="clear: both; padding-top: 10px;">
+						                Below is an example of tracking the event selected in Step 3 with linking for an email form input field
+						            </div>
+						            
+						            <div class="pbBody" style="clear: both; padding-top: 5px">
+						                <div id="linking_code" class="generated_tracking">
+						                	<pre id="linking_code" class="generated_tracking">		                	
+						                	</pre>
+						                </div>
+						            </div>-->
+						            
+						            
+						            </div>
+						        </td>
+						    </tr>
+						</table>
+			</div>
+			
+			<!-- Email Tracking Section -->
+			<div id="emailTracking" class="apexp">
+						<table style="width: 100%">
+						    <tr>
+								<td>
+									<div class="bPageBlock apexDefaultPageBlock">
+										<h1 class="pbHeader">Email Tracking</h1>
+									
+										<div class="pbBody" style="clear: both; padding-top: 10px;">
+											Clearview Express page tracking can be setup to track email clickthroughs upon landing on the web page.  This is accomplished by looking for a query string parameter in the page url to identify the source as being from an email clickthrough.
+										</div>
+										
+										<div class="pbBody" style="clear: both">
+							            	<div class="pbSubheader tertiaryPalette">
+							            		<h3>Generate Page Tracking Code</h3>
+							            	</div>
+							            </div>
+							            
+							            <div id="track_options" class="pbBody">
+						                <table style="float: left">
+						                	<tr>
+						                		<div id="package_div">
+						                            <td>Package</td>
+						                            <td>
+						                                <input id="emailPackage_lkid" type="hidden" value="000000000000000" name="emailPackage_lkid" />
+						                                <input id="emailPackage_lkold" type="hidden" value="null" name="emailPackage_lkold" />
+						                                <input id="emailPackage_lktp" type="hidden" value="{!PackagePrefix}" name="emailPackage_lktp" />
+						                                <input id="emailPackage_lspf" type="hidden" value="0" name="emailPackage_lspf" />
+						                                <input id="emailPackage_lspfsub" type="hidden" value="0" name="emailPackage_lspfsub" />
+						                                <input id="emailPackage_mod" type="hidden" value="0" name="emailPackage_mod" />
+						                                
+						                                <span class="lookupInput">
+						                                    <input type="text" tabindex="2" size="20" onchange="getElementByIdCS('emailPackage_lkid').value='';getElementByIdCS('emailPackage_mod').value='1';" name="emailPackage" maxlength="255" id="emailPackage" onclick="javascript: setLastMousePosition(event); openLookup('/_ui/common/data/LookupPage?lkfm=editPage&lknm=emailPackage&lktp=' + getElementByIdCS('emailPackage_lktp').value,670,'1','&lksrch=' + escapeUTF(getElementByIdCS('emailPackage').value.substring(0, 80)))" readonly="readonly" style="cursor: pointer" />
+						                                    <a title="Package Lookup (New Window)" tabindex="2" onclick="setLastMousePosition(event)" id="Package_lkwgt" href="javascript:%20openLookup%28%27%2F_ui%2Fcommon%2Fdata%2FLookupPage%3Flkfm%3DeditPage%26lknm%3DemailPackage%26lktp%3D%27%20%2B%20getElementByIdCS%28%27emailPackage_lktp%27%29.value%2C670%2C%271%27%2C%27%26lksrch%3D%27%20%2B%20escapeUTF%28getElementByIdCS%28%27emailPackage%27%29.value.substring%280%2C%2080%29%29%29">
+																<img title="Package Lookup (New Window)" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onblur="this.className = 'lookupIcon';" class="lookupIcon" alt="Package Lookup (New Window)" src="/s.gif" />
+															</a>
+						                                </span>
+						                            </td>    
+						                        </div>
+						                 	</tr>
+						                 	<tr>
+						                        <td></td>
+						                        <td><input class="btn" type="button" id="emailGenerate" value="Generate"  /></td>
+						                    </tr>
+						                 </table>
+						                </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	The below code demonstrates how to track email clickthroughs in addition to page views with page tracking code.
+							            </div>
+							            <div class="pbBody">
+							                <div id="emailTracking_code" class="generated_tracking">
+							                </div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both">
+							            	<div class="pbSubheader tertiaryPalette">
+							            		<h3>Update Email Links</h3>
+							            	</div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	Links in emails should be updated to include query parameters indicating that the source is an email and also indicating which contact or lead clicked on the link.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	If an original link looks like:
+							            </div>
+							            
+							            <div class="pbBody">
+							                <div class="generated_tracking">
+							                	<pre class="generated_tracking">
+&lt;a href="http://www.clearviewexpress.com"&gt;Example Link&lt;/a&gt;
+							                	</pre>
+							                </div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	It should be updated to look like:
+							            </div>
+							            <div class="pbBody">
+							                <div class="generated_tracking">
+							                	<pre class="generated_tracking">
+<apex:outputText value="&lt;a href=&quot;http://www.clearviewexpress.com&#63;li=&#123;&#33;Contact&#46;Id&#125;&#123;&#33;Lead&#46;Id&#125;&amp;src=em&quot;&gt;Example Link&lt;/a&gt;" escape="false"></apex:outputText>
+							                	</pre>
+							                </div>
+							            </div>
+							            
+						            </div>
+								</td>
+							</tr>
+						</table>
+			</div>
+			
+			<!-- Tracking Reference Section -->
+			<div id="trackingReference" class="apexp">
+						<table style="width: 100%">
+						    <tr>
+						        <td>
+						            <div class="bPageBlock apexDefaultPageBlock">
+						            
+							            <h1 class="pbHeader">Tracking Reference</h1>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                The Clearview tracking code is a <a href="http://docs.jquery.com/Plugins/Authoring">jQuery plugin</a>.  It has been tested with the latest version of jQuery (1.6.2), but may work with earlier versions as well.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both">
+							            	<div class="pbSubheader tertiaryPalette">
+							            		<h3>Instantiate</h3>
+							            	</div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                To create a tracking object, you need:
+							                <ul>
+							                	<li>jQuery library</li>
+							                	<li>Clearview library</li>
+							                	<li>code to create a jQuery.sa object</li>
+							                </ul>
+							            </div>
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	The below code will create a <span class="green">jQuery.sa</span> object for your org.
+							            </div>
+							            <div class="pbBody">
+							                <div id="trackingReference_instantiate" class="generated_tracking">
+							                </div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both">
+							            	<div class="pbSubheader tertiaryPalette">
+							            		<h3>Methods</h3>
+							            	</div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	The methods that can be used with the <span class="green">jQuery.sa</span> object are:
+							                <ul>
+							                	<li><a href="#eventTrack" class="tracking_link">eventTrack</a><span class="green"> ( { email: string, type: id, campaign: id, url: string, ref: string, success: function() } )</span></li>
+							                	<li><a href="#linkEmail" class="tracking_link">linkEmail</a><span class="green"> ( { email: string, success: function() } )</span></li>
+							                </ul>
+							            </div>
+						            
+						            </div>
+						        </td>
+						 	</tr>
+						 </table>
+			</div>
+			
+			
+			<!-- eventTrack Section -->
+			<div id="eventTrack" class="apexp">
+						<table style="width: 100%">
+						    <tr>
+						        <td>
+						            <div class="bPageBlock apexDefaultPageBlock">
+						            
+							            <h1 class="pbHeader">eventTrack</h1>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                The <span class="green">eventTrack</span> method is main method used with the <span class="green">jQuery.sa</span> object.  It can be used to track any visitor actions.  By default the two types of events are:
+							                
+							                <ul>
+							                	<li>Page Visit</li>
+							                	<li>Form Submit</li>
+							                </ul>
+							                
+							                Custom events can be created as well.  This is described in the section below <b>Custom Events</b>.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                The below code is a typical example of using the <span class="green">eventTrack</span> method
+							            </div>
+							           
+							            <div class="pbBody">
+							                <div id="eventTrackBasic" class="generated_tracking">
+							                </div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                This example includes the one required parameter of this method, type, which is the Salesforce.com record type id for the custom object, Visitor Action, that will be created.  The id in the above code is the record type id for the Page Visit record type for your organization.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                The code below is the same as the previous example, but with all the optional parameters that may be specified
+							            </div>
+							            
+							            <div class="pbBody">
+							                <div id="eventTrackAdvanced" class="generated_tracking">
+							                </div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	<h2>Parameters</h2>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                <span class="green"><i>id </i>type</span> Required parameter that specifies the record type id that should be used when creating the Salesforce.com custom object Visitor Action.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                <span class="green"><i>id </i>campaign</span> Optional parameter that links the Visitor Action to a Salesforce.com camapaign.  The value used should be the Salesforce.com campaign id that you would like to link the Visitor Action to.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                <span class="green"><i>string </i>url</span> Optional parameter to override the url that is tracked for the Visitor Action.  By default it will be the url of the page where the method call is made.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                <span class="green"><i>string </i>ref</span> Optional parameter to override the referring url that is tracked for the Visitor Action.  By default it uses the document.refferer value for the page.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                <span class="green"><i>string </i>email</span> Optional parameter to specify an email to save to the Visitor object in Salesforce.com.  This field is used to link Visitors to Leads and Contacts in Salesforce.com, but it is usually passed using the <a href="#linkEmail" class="tracking_link">linkEmail</a> method.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                <span class="green"><i>function </i>success</span> Optional parameter to pass a function to be called after the event has finished being tracked and saved to Salesforce.com.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both">
+							            	<div class="pbSubheader tertiaryPalette">
+							            		<h3>Custom Events</h3>
+							            	</div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	To track different types of events, other than Page Visits and Form Submits new record types can be created for the Visitor Action custom Salesforce.com object.  To create new record types, your Salesforce.com administrator can go to 'Setup' -> 'Create' -> 'Objects' -> 'Visitor Action' and click the 'New' button in the Record Types section for this custom object.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							          		New record types will automatically show up in the list of Events that can be selected when generating code on <a href="#gettingStarted" class="tracking_link">Getting Started</a> Step 2.
+							          	</div>
+						            
+						            </div>
+						        </td>
+						 	</tr>
+						 </table>
+			</div>
+			
+			
+			
+			<!-- linkEmail Section -->
+			<div id="linkEmail" class="apexp">
+						<table style="width: 100%">
+						    <tr>
+						        <td>
+						            <div class="bPageBlock apexDefaultPageBlock">
+						            
+							            <h1 class="pbHeader">linkEmail</h1>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                The <span class="green">linkEmail</span> method is used to pass an email address value to Salesforce.com for a website visitor.  If an email address for the visitor is known when <a href="#eventTrack" class="tracking_link">eventTrack</a> is called it can be passed as an optional parameter.  <span class="green">linkEmail</span> can be used at any point afterwards, for example when a user fills in an email address form field.
+							            </div>
+							            
+							           
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	The below code highlights the <span class="green">linkEmail</span> components in an example.
+							            </div>
+							            <div class="pbBody">
+							                <div id="linkEmail_code" class="generated_tracking">
+							                	<pre id="linkEmail_code" class="generated_tracking">
+&lt;html&gt;
+	&lt;head&gt;...&lt;/head&gt;
+	&lt;body&gt;
+		...
+		&lt;form action="..."&gt;
+			Email: &lt;input type="text" name="email" id="email" /&gt;
+			&lt;input type="submit" value="Submit" /&gt;
+		&lt;/form&gt;
+		...
+		&lt;script type="text/javascript"&gt;
+			var saTracker;
+			jQuery.getScript("...", function() {
+				saTracker = new jQuery.sa();
+				...
+			
+				jQuery("#email").blur(function() {
+					var email = this.value;
+					saTracker.linkEmail({ email: email });
+				});
+			});
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+							                </div>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							            	<h2>Parameters</h2>
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                <span class="green"><i>string </i>email</span> Required parameter that specifies the email to be saved to the visitor record.
+							            </div>
+							            
+							            <div class="pbBody" style="clear: both; padding-top: 10px;">
+							                <span class="green"><i>function </i>success</span> Optional parameter to pass a function to be called after the email has finished being saved to Salesforce.com.
+							            </div>
+						            
+						            </div>
+						        </td>
+						 	</tr>
+						 </table>
+			</div>
+			
+			
+		</td>
+	</tr>
+</table>
+
+</apex:page>

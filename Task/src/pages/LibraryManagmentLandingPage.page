@@ -1,0 +1,130 @@
+<apex:page controller="LibraryManagment" >
+    <head>
+        <meta charset="utf-8"></meta>
+        <apex:stylesheet value="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css"/>
+        <apex:includeScript value="//code.jquery.com/jquery-1.10.2.js" />
+        <apex:includeScript value="//code.jquery.com/ui/1.11.3/jquery-ui.js"/>
+
+        <script>
+            $(function() {
+              $( "#issue-block" ).dialog({
+                    autoOpen: false,
+                    height: 380,
+                    width: 947,
+                    modal: true,
+                    show: {
+                      effect: "explode",
+                      duration: 500
+                    },
+                    hide: {
+                      effect: "explode",
+                      duration: 500
+                    }
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            function issuseBookPopup(pBookId, pBookName, pBookNoOfCopies){
+                var bookName = pBookName;
+                var bookId = pBookId;
+                var bookNoOfCopies = pBookNoOfCopies;
+                if(bookNoOfCopies != 0){
+                    document.getElementById('j_id0:popup:issueDetails:IssueBookPageBlockSec:bookName').value = bookName;
+                    document.getElementById('j_id0:popup:issueDetails:IssueBookPageBlockSec:bookId').value = bookId;
+                    document.getElementById('j_id0:popup:issueDetails:IssueBookPageBlockSec:bookNoOfCopies').value = bookNoOfCopies;
+                    $(function() {
+                        $("#issue-block").dialog( "open" );
+                    });
+                    return false;
+                }
+                else{
+                    alert(bookName + ' cannot be issued as there are no copies available. ');
+                    return false;
+                }
+            }
+        </script>
+        <script type="text/javascript">
+            function setMemberName(pMemberId, pMemberName){
+                var memberId = pMemberId;
+                var memberName = pMemberName;
+                document.getElementById('j_id0:popup:issueDetails:IssueBookPageBlockSec:memberId').value = memberId;
+                document.getElementById('j_id0:popup:issueDetails:IssueBookPageBlockSec:memberName').value = memberName;
+            }
+        </script>
+    </head>
+
+    <apex:form id="main">
+    <apex:pageMessages id="showmsg" ></apex:pageMessages>
+    <apex:pageBlock id="IssueBook">
+        <apex:pageBlockSection id="searchBlock" columns="3">
+            <apex:inputText id="searchBook" value="{!searchBookString}" style="width:500px" html-autocomplete="off">
+                <apex:actionSupport event="onkeyup" action="{!searchBook}" reRender="resultBlock"/>
+            </apex:inputText>
+            <apex:commandButton value="Search Book" reRender="resultBlock, showmsg" action="{!searchBook}" status="searchStatus"/>
+                <apex:actionStatus id="searchStatus" style="align:right;" layout="inline" >
+                    <apex:facet name="start" >
+                    <div class="waitingSearchDiv" style="background-color: #ffffff; height:100%; opacity:0.80; width:100%;">
+                        <div class="waitingHolder" style="top: 100px; width: 91px;">
+                            <img src="/img/loading.gif" height="20" width="20"/><br/>
+                            <span class="waitingDescription">{!$Label.Loading}</span>
+                        </div>
+                    </div>
+                    </apex:facet>
+                </apex:actionStatus>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection id="resultBlock">
+            <apex:pageBlockTable value="{!bookList}" var="record">
+                    <apex:column headerValue="Book Code" value="{!record.Book_No__c}"/>
+                    <apex:column headerValue="Book Name">
+                        <apex:commandLink id="id" onclick="return issuseBookPopup('{!record.Id}', '{!record.Name}',{!record.No_Of_Copies__c});"> {!record.Name} </apex:commandLink>
+                    </apex:column>
+                    <apex:column headerValue="Copies Available" value="{!record.No_Of_Copies__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </apex:form>
+
+    <div id="issue-block">
+    <apex:form id="popup">
+    <apex:pageMessages id="showmsg"></apex:pageMessages>
+        <apex:pageBlock id="IssueBookPageBlock">
+            <apex:pageBlockSection id="searchMemberBlock" columns="3">
+                <apex:inputText id="searchMember" value="{!searchMemberString}" style="width:500px" >
+                    <apex:actionSupport event="onkeypup" action="{!searchMember}" reRender="resultBlock, showmsg, issueDetails, IssueBookPageBlock"/>
+                </apex:inputText>
+                <apex:commandButton value="Search Member" reRender="resultBlock, showmsg, issueDetails" action="{!searchMember}" status="searchStatus"/>
+                <apex:actionStatus id="searchStatus" >
+                    <apex:facet name="start">
+                        <img src="/img/loading.gif" />
+                    </apex:facet>
+                </apex:actionStatus>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="resultBlock">
+                <apex:pageBlockTable value="{!memberList}" var="record">
+                    <apex:column headerValue="Member No" value="{!record.Library_Member_No__c}"/>
+                    <apex:column headerValue="Member Name">
+                        <apex:commandLink id="id" onclick="return setMemberName('{!record.Id}','{!record.Name}');" reRender="issueDetails"> {!record.Name} </apex:commandLink>
+                    </apex:column>
+                    <apex:column headerValue="Member Phone No" value="{!record.Phone_No__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock id="issueDetails">
+            <apex:pageBlockSection id="IssueBookPageBlockSec" columns="2">
+                <apex:inputField id="memberId" value="{!libraryMemberObj.Id}"/>
+                <apex:inputField id="memberNo" value="{!libraryMemberObj.Library_Member_No__c}"/>
+                <apex:inputField id="bookId" value="{!bookObj.Id}"/>
+                <apex:inputField id="bookNoOfCopies" value="{!bookObj.No_Of_Copies__c}"/>
+                <apex:inputField id="memberName" value="{!libraryMemberObj.Name}"/>
+                <apex:inputField id="bookName" value="{!bookObj.Name}"/>
+                <apex:outputField id="issueDate" value="{!bookIssuedObj.Issue_Date__c}"/>
+                <apex:outputField id="lastReturnDate" value="{!bookIssuedObj.Due_Date_For_Return__c}"  />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1">
+                <apex:commandButton id="issueButton" value="Issue Book" action="{!issueBook}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    </div>
+
+</apex:page>

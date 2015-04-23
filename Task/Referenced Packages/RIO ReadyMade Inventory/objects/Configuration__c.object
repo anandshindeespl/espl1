@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>false</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Auto_Fill_Product_External_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This will determine whether we auto fill the field &apos;Inventory Product Code&apos; inside Product records with the Product Name or the Product Code or leaving it Blank for the user to fill it in manually themselves.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This will determine whether we auto fill the field &apos;Inventory Product Code&apos; inside Product records with the Product Name or the Product Code or leaving it Blank for the user to fill it in manually themselves.</inlineHelpText>
+        <label>Auto Fill Product External Id</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Do Nothing</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Product Name</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Product Code</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Default_Location_choice__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Determines which default location value will be used for new Opp Product or Order insertion, either the Product&apos;s default location, or the Account&apos;s default location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Determines which default location value will be used for new Opp Product or Order insertion, either the Product&apos;s default location, or the Account&apos;s default location</inlineHelpText>
+        <label>Default Location choice</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Product</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Account</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Apps__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Enable</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Paid_Version__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>paid version enabled?</description>
+        <externalId>false</externalId>
+        <label>Enable Paid Version</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Sales_Order__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>determines whether RIO Inventory will use Sales Order or just the Opportunity Line Item itself, which will alter the breakdown of the source of quantity allocated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>determines whether RIO Inventory will use Sales Order or just the Opportunity Line Item itself, which will alter the breakdown of the source of quantity allocated.</inlineHelpText>
+        <label>Enable Sales Order</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Inventory_Transaction_History_Keep_Days__c</fullName>
+        <defaultValue>30</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Inventory Transaction History Keep Days</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Overwrite_Product_Threshold__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Allow individual product threshold, otherwise configuration&apos;s product threshold will overwrite all product&apos;s threshold upon configuration save.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Allow individual product threshold, otherwise configuration&apos;s product threshold will overwrite all product&apos;s threshold upon configuration save.</inlineHelpText>
+        <label>Overwrite Product Threshold</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Qualify_Opportunity_Stage__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Deduct Inventory when Opportuntities are at this Probability (%)</inlineHelpText>
+        <label>Opportunity - Probablility (%)</label>
+        <precision>3</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_Threshold__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Opportunity Products will display a warning when inventory levels drop below this number.</inlineHelpText>
+        <label>Quantity Threshold</label>
+        <precision>18</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Configuration</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>A-{000000}</displayFormat>
+        <label>Configuration Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Configurations</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>OppStageNotMoreThan100</fullName>
+        <active>true</active>
+        <description>The Qualify Opportunity Stage should not be more than 100%</description>
+        <errorConditionFormula>Qualify_Opportunity_Stage__c  &gt; 100</errorConditionFormula>
+        <errorDisplayField>Qualify_Opportunity_Stage__c</errorDisplayField>
+        <errorMessage>The Qualify Opportunity Stage should not be more than 100%</errorMessage>
+    </validationRules>
+</CustomObject>

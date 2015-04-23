@@ -1,0 +1,80 @@
+<apex:page standardController="Lead" extensions="clearview.saUILActions">
+	
+	<apex:form id="packageSummary">
+		<apex:pageBlock title="Clearview Express Packet Activity ({!pckgeResultsSize})">
+			<apex:pageBlockButtons >
+				<apex:commandButton onclick="top.location='{!$Page.clearview__SendEmail}?id={!Lead.Id}&type=lead'" value="Send Packet"/>
+			</apex:pageBlockButtons>
+			
+			<apex:pageBlockTable var="p" value="{!pckges}" >
+				<apex:column headerValue="Packet">{!p.pckge}</apex:column>
+				<apex:column headerValue="First Sent">{!p.local_first_sent}</apex:column>
+				<apex:column headerValue="First Open">{!p.local_first_visit}</apex:column>
+				<apex:column headerValue="Last Open">{!p.local_last_visit}</apex:column>
+				<apex:column headerValue="Total Opens">{!p.num_visits}</apex:column>
+				<apex:column headerValue="Total Tabs">{!p.num_pageview}</apex:column>
+				<apex:column headerValue="Form Submits">{!p.num_formsubmit}</apex:column>
+				<!--<apex:column headerValue="Video Views">{!p.num_videoview}</apex:column>-->
+				<apex:column headerValue="Emails Sent">{!p.num_emailsends}</apex:column>
+				<apex:column headerValue="Email Clickthroughs">{!p.num_emailclick}</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+	
+	<apex:pageBlock title="Clearview Express Tab Activity ({!resultsSize})">
+		<apex:form id="packageActivity">
+			
+			<apex:pageBlockTable var="t" value="{!tabs}" >
+				<!-- <apex:column value="{!a.Date__c}" />
+				<apex:column headerValue="Tab"><apex:outputLink value="{!$Site.Domain}/{!a.Id}" onclick="top.location=this.href">{!a.Title__c}</apex:outputLink></apex:column>
+				<apex:column headerValue="Packet"><apex:outputLink value="{!$Site.Domain}/{!a.Package__c}" onclick="top.location=this.href">{!a.Package__r.Name}</apex:outputLink></apex:column>
+				<apex:column headerValue="Activity">{!a.RecordType.Name}</apex:column>
+				<apex:column value="{!a.URL__c}" /> -->
+				<apex:column headerValue="Packet" value="{!t.packet}" />
+				<apex:column headerValue="Tab" value="{!t.tab}" />
+				<apex:column headerValue="First View" value="{!t.local_first_view}" />
+				<apex:column headerValue="Last View" value="{!t.local_last_view}" />
+				<apex:column headerValue="Total Views" value="{!t.num_pageview}" />
+			</apex:pageBlockTable>
+	
+			<apex:panelGrid columns="3">
+				<apex:commandLink action="{!previous}" rendered="{!hasPrevious}">
+					Previous
+				</apex:commandLink>
+				<apex:outputText >
+					{!currentActions}
+				</apex:outputText>
+				<apex:commandLink action="{!next}" rendered="{!hasNext}">
+					Next
+				</apex:commandLink>
+			</apex:panelGrid>
+		</apex:form>
+	</apex:pageBlock>
+	
+	<apex:pageBlock title="Clearview Express Web Activity ({!webResultsSize})">
+		<apex:form id="webActivity">
+			<apex:pageBlockTable var="w" value="{!webActions}" >
+				<!--<apex:column value="{!a.Date__c}" />
+				<apex:column headerValue="Page"><apex:outputLink value="{!$Site.Domain}/{!a.Id}" onclick="top.location=this.href">{!a.Title__c}</apex:outputLink></apex:column>
+				<apex:column headerValue="Activity">{!a.RecordType.Name}</apex:column>
+				<apex:column value="{!a.URL__c}" /> -->
+				<apex:column headerValue="Page" value="{!w.tab}" />
+				<apex:column headerValue="First View" value="{!w.local_first_view}" />
+				<apex:column headerValue="Last View" value="{!w.local_last_view}" />
+				<apex:column headerValue="Total Views" value="{!w.num_pageview}" />
+			</apex:pageBlockTable>
+			
+			<apex:panelGrid columns="3">
+				<apex:commandLink action="{!webPrevious}" rendered="{!webHasPrevious}">
+					Previous
+				</apex:commandLink>
+				<apex:outputText >
+					{!currentWebActions}
+				</apex:outputText>
+				<apex:commandLink action="{!webNext}" rendered="{!webHasNext}">
+					Next
+				</apex:commandLink>
+			</apex:panelGrid>
+		</apex:form>
+	</apex:pageBlock>
+</apex:page>

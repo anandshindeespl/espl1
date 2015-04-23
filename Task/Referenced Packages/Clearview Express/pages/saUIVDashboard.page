@@ -1,0 +1,391 @@
+<apex:page standardController="clearview__Visitor__c" extensions="clearview.saUIDashboard">
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.sAlytics, 'css/start/jquery-ui-1.8.12.custom.css')}"/> -->
+	<style type="text/css">
+	    h1.pbHeader, h2.pbHeader, h3.pbHeader {margin: 7px 12px !important; display: block; border: none !important; font-size: 1.2em; line-height: 1.3em;}
+	    span.headerOptions {font-size: 12px; float: right; font-weight: normal}
+	    span.headerOptions a {text-decoration: none}
+	    div.aggregateResult { background-color: #ffffff; border: 1px solid #cccccc; display: inline; margin-right: 10px; padding: 3px; border-color: #eeeeee #eeeeee #cccccc; border-radius: 3px; }
+	    
+	    .ui-datepicker {
+	        display: none;
+	        padding: 0.2em 0.2em 0;
+	        width: 17em;
+	        border: 1px solid #cccccc; border-color: #eeeeee #eeeeee #cccccc; border-radius: 3px; background-color: #ffffff; box-shadow: 0 2px 6px #111111;
+	    }   
+	    .ui-datepicker .ui-datepicker-header {
+	        padding: 0.2em 0;
+	        position: relative;
+	    }
+	        .ui-helper-clearfix {
+	            display: inline block;
+	        }
+	        .ui-helper-clearfix {
+	            display: block;
+	        }
+	    .ui-datepicker .ui-datepicker-prev {
+	        left: 2px;
+	        background: url("{!BaseURL}/img/alohaSkin/cal_sprite.png") no-repeat scroll 0 -61px transparent;
+	    }
+	    .ui-datepicker .ui-datepicker-prev:hover {
+	    	background: url("{!BaseURL}/img/alohaSkin/cal_sprite.png") no-repeat scroll -18px -61px transparent;
+	    }
+	    .ui-datepicker .ui-datepicker-next {
+	        right: 2px;
+	        background: url("{!BaseURL}/img/alohaSkin/cal_sprite.png") no-repeat scroll 0 -84px transparent;
+	    }
+	    .ui-datepicker .ui-datepicker-next:hover {
+	    	background: url("{!BaseURL}/img/alohaSkin/cal_sprite.png") no-repeat scroll -18px -84px transparent;
+	    }
+	    .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {
+	        height: 16px;
+	        width: 18px;
+	        position: absolute;
+	        top: 2px;
+	        text-indent: -3000px;
+	        white-space: nowrap;
+		    /*border-color: #B5B5B5 #B5B5B5 #7F7F7F;
+		    border-radius: 3px 3px 3px 3px;
+		    border-style: solid;
+		    border-width: 1px;*/
+	    }
+	    .ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span {
+	        display: block;
+	        left: 50%;
+	        margin-left: -12px;
+	        margin-top: -8px;
+	        position: absolute;
+	        top: 50%;
+	    }
+	    .ui-datepicker .ui-datepicker-title {
+	        line-height: 1.8em;
+	        margin: 0 2.3em;
+	        text-align: center;
+	    }
+	    .ui-datepicker th {
+	        border: 0 none;
+	        font-weight: bold;
+	        padding: 0.7em 0.3em;
+	        text-align: center;
+	        background: url({!BaseURL}/img/alohaSkin/header_mutton.png) 0 -96px; line-height: 1.0em; color: #ffffff;
+	    }
+	    .ui-datepicker table {
+	        border-collapse: collapse;
+	        font-size: 0.9em;
+	        margin: 0 0 0.4em;
+	        width: 100%;
+	    }
+	    
+	    .ui-datepicker td {
+	        border: 0 none;
+	        padding: 1px;
+	    }
+	    .ui-datepicker td span, .ui-datepicker td a {
+	        display: block;
+	        padding: 0.2em;
+	        text-align: right;
+	        text-decoration: none;
+	        border: 1px solid #cccccc;
+	        background: url({!BaseURL}/img/alohaSkin/btn_sprite.png);
+	    }
+	    .ui-datepicker td a:hover {
+	        background: url({!BaseURL}/img/alohaSkin/btn_sprite.png) 0 -30px;
+	    }
+	    .ui-datepicker td a.ui-state-active {
+	        background: url({!BaseURL}/img/alohaSkin/btn_sprite.png) 0 -120px;
+	    }
+	    
+	</style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"></script>
+    <script type="text/javascript">jQuery.noConflict();</script>
+    <script src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        
+        /*Charting*/
+        Object.size = function(obj) {
+	    	var size = 0, key;
+	    	for(key in obj) {
+	    		if(obj.hasOwnProperty(key)) size++;
+	
+	    	}
+	    	return size;
+	    };
+	    
+	    Date.prototype.addHours = function(h) {    
+		   this.setTime(this.getTime() + (h*60*60*1000)); 
+		   return this;   
+	
+		}
+		
+		function roundNumber(number, digits) {
+			var multiple = Math.pow(10, digits);
+			var rndedNum = Math.round(number * multiple) / multiple;
+			return rndedNum;
+		}
+	    
+	    google.load('visualization', '1', {'packages':['corechart']});
+        
+        function drawChart(start_date, end_date) {
+	        jQuery.getJSON("{!BaseURL}/apex/clearview/clearview__saREST?action=visitor&id={!Visitor__c.Id}&start_date="+start_date+"&end_date="+end_date+"&core.apexpages.devmode.url=1", {}, function(response) {
+
+				//jQuery("#chart_div").html(response.toString());
+				var tempDate = new Object(); //tempDate(date, action, keyval session)
+				
+				//create google data table and columns
+		        var ATData = new google.visualization.DataTable();
+		        
+		        ATData.addColumn("date", "Date");
+	       		ATData.addColumn("number", "Visits");
+	       		
+	       		for(var type in response.actionTypes) {
+	       			ATData.addColumn("number", response.actionTypes[type]);
+	       		}
+	       		
+	       		var ATRows = new Array(); // AData(date, visit, ...)
+	       		
+	       		//go through records, for each:
+	       		//1. they are new, and new tempDate is created (1 visit, 1 action based on type)
+	       		//2. new date entry in tempDate
+	       		//3. tempDate already has numbers for date going
+	       		for(var r in response.records) {
+	       			if(typeof tempDate.date == "undefined") {
+	       				//new tempDate entry
+	       				tempDate.date = jQuery.datepicker.parseDate("yy-mm-dd", response.records[r].Date);
+		    			tempDate.visit = new Array();
+		    			
+		    			for(var type in response.actionTypes) {
+		    				tempDate[response.actionTypes[type]] = 0;
+		    			}
+		    			
+		    			tempDate[response.records[r].RecordType] = 1;
+		    			tempDate.visit[response.records[r].Visit] = 1;
+		    			
+	       			} else if (jQuery.datepicker.parseDate("yy-mm-dd", response.records[r].Date).getTime() != tempDate.date.getTime()) {
+	       				//new row to add to ATData
+	       				var ATDataRow = new Array();
+	       				ATDataRow.push(tempDate.date);
+	       				ATDataRow.push(Object.size(tempDate.visit));
+	       				
+	       				for(var type in response.actionTypes) {
+	       					ATDataRow.push(tempDate[response.actionTypes[type]]);
+	       				}
+		    			
+		    			ATRows.push(ATDataRow);
+		    			
+		    			//refresh tempDate object
+		    			tempDate.date = jQuery.datepicker.parseDate("yy-mm-dd", response.records[r].Date);
+		    			tempDate.visit = new Array();
+		    			
+		    			for(var type in response.actionTypes) {
+		    				tempDate[response.actionTypes[type]] = 0;
+		    			}
+		    			
+		    			tempDate[response.records[r].RecordType] = 1;
+		    			tempDate.visit[response.records[r].Visit] = 1;
+		    			
+	       			} else {
+	       				//update existing tempDate row
+	       				tempDate[response.records[r].RecordType] += 1;
+		    			if(typeof tempDate.visit[response.records[r].Visit] == "undefined") {
+		    				tempDate.visit[response.records[r].Visit] = 1;
+		    			} else {
+		    				tempDate.visit[response.records[r].Visit] += 1;
+		    			}
+	       			}
+	       			
+	       			//console.log(tempDate);
+	       		}
+	       			
+       			//create new row to add to ATData
+		    	var ATDataRow = new Array();
+	   			ATDataRow.push(tempDate.date);
+	   			ATDataRow.push(Object.size(tempDate.visit));
+	   			
+	   			for(var type in response.actionTypes) {
+   					ATDataRow.push(tempDate[response.actionTypes[type]]);
+   				}
+	   			
+	   			ATRows.push(ATDataRow);
+   				ATData.addRows(ATRows);
+   				
+   				jQuery("#chart_div").attr("style", function() {
+	            	var width = jQuery(this).closest("div.pbBody").attr("offsetWidth") * 0.65;
+	            	return ("width: " + width + "px; height: 240px");
+	            });
+	            
+	            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            	chart.draw(ATData, {reverseCategories: true, backgroundColor: {stroke: '#D4DADC', strokeWidth: 1}, pointSize: 2});
+			});
+	    }
+	    /**/
+        
+        
+        /*
+    	build tables
+	    	ex:
+	    	var cols = new Array("Column 1", "Column 2");
+	    	var data = [{"Column 1": "Value 1", "Column 2": "Value 2"}, {"Column 1": "Value 3", "Column 2": "Value 4"}];
+	    	build_table(cols, data);
+	    */
+		function build_table(cols, data) {
+			var html = '\
+			<table class="list" border="0" cellspacing="0" cellpadding="0">';
+				
+			if(cols != "no") {
+				html += '\
+				<thead class="rich-table-thead">\
+					<tr class="headerRow">\
+				';
+				for(var c in cols) {
+					html += '\
+						<th class="headerRow">' + jQuery('<div></div>').text(cols[c]).get(0).outerHTML + '</th>\
+					';
+				}   
+				html += '\
+					</tr>\
+				</thead>\
+				';
+			}
+			
+			html += '\
+				<tbody>';
+			
+				for(var i=0; i < data.length;  i++) {
+					html_options = ((i % 2) == 0) ? 'even' : 'odd';
+					html_options += (i == 0) ? ' first' : '';
+					html_options += (i == (data.length - 1)) ? ' last' : '';
+					html += '\
+					<tr class="dataRow ' + html_options + '" onmouseover="hiOn(this)" onmouseout="hiOff(this)">\
+					';
+					if(cols != "no") {
+						for(var j=0; j < cols.length; j++) {
+							//html += '<td>' + jQuery('<span></span>').text(data[i][cols[j]]).get(0).outerHTML + '</td>';
+							html += '<td><span>' + data[i][cols[j]] + '</span></td>';
+						}
+					} else {
+						for(var j in data[i]) {
+							//html += '<td>' + jQuery('<span></span>').text(data[i][j]).get(0).outerHTML + '</td>';
+							html += '<td><span>' + data[i][j] + '</span></td>';
+						}
+					}
+					html += '\
+					</tr>\
+					';
+				}
+			html += '\
+				</tbody>\
+			</table>';
+			return html;    
+		}
+		
+        /*render everything*/
+        function render_all() {
+        	var start_date = jQuery("#startDate").val();
+	        var end_date = jQuery("#endDate").val();
+			
+			try {
+	        	google.setOnLoadCallback(drawChart(jQuery("#startDate").val(), jQuery("#endDate").val()));
+	        } catch(e) {
+	        	//alert(e);
+	        }
+	        
+	        jQuery.getJSON("{!BaseURL}/apex/clearview/clearview__saREST?action=visitor_campaigns&id={!Visitor__c.Id}&start_date="+start_date+"&end_date="+end_date+"&max=10&core.apexpages.devmode.url=1", function(response) {
+	        	jQuery("#campaigns").html(build_table(new Array("Actions", "Campaign"), response));
+	        	jQuery("#campaigns a").click(function() {
+	        		top.location = this.href;
+	        		return false;
+	        	});
+	        });
+	        
+	        jQuery.getJSON("{!BaseURL}/apex/clearview/clearview__saREST?action=visitor_pages&id={!Visitor__c.Id}&start_date="+start_date+"&end_date="+end_date+"&max=5&core.apexpages.devmode.url=1", function(response) {
+	        	jQuery("#top_pages").html(build_table(new Array("Actions", "URL"), response));
+	        	jQuery("#top_pages a").click(function() {
+	        		top.location = this.href;
+	        		return false;
+	        	});
+	        });
+	        
+	        jQuery.getJSON("{!BaseURL}/apex/clearview/clearview__saREST?action=visitor_referring&id={!Visitor__c.Id}&start_date="+start_date+"&end_date="+end_date+"&max=5&core.apexpages.devmode.url=1", function(response) {
+	        	jQuery("#referring_pages").html(build_table(new Array("Actions", "Referrer"), response));
+	        	jQuery("#referring_pages a").click(function() {
+	        		top.location = this.href;
+	        		return false;
+	        	});
+	        });
+	        
+	        jQuery.getJSON("{!BaseURL}/apex/clearview/clearview__saREST?action=visitor_totals&id={!Visitor__c.Id}&start_date="+start_date+"&end_date="+end_date+"&core.apexpages.devmode.url=1", function(response) {
+	        	var html = '';
+	        	for(val in response) {
+	        		html += jQuery('<div class="aggregateResult"></div>').text(val + 's: ' + response[val]).get(0).outerHTML;
+	        	}
+	        	jQuery("#aggregates").html(html);
+	        });
+        }
+        
+        /*document ready functions*/
+		jQuery(document).ready(function() {
+			//Setup dates
+			jQuery("#startDate").datepicker({ dateFormat: "yy-mm-dd" });
+	        jQuery("#endDate").datepicker({ dateFormat: "yy-mm-dd" });
+	        
+	        jQuery("#startDate").datepicker("setDate", "-365");
+	        jQuery("#endDate").datepicker("setDate", "+0");
+	        jQuery("#ui-datepicker-div").hide();
+	        
+	        render_all();
+	        
+	        jQuery("#refresh").click(function() {
+	        	render_all();
+	        });
+		});
+		
+		/**/
+    </script>
+    <style type="text/css">
+        body {margin: 0; padding: 0}
+    </style>
+
+    <div class="apexp">
+        <table style="width: 100%">
+            <tr>
+                <td colspan="2">
+                    <div class="bPageBlock apexDefaultPageBlock" style="margin-bottom: 0px">
+                    <h1 class="pbHeader">Timeframe<span class="headerOptions">Start Date: <input type="text" name="startDate" id="startDate" /> End Date: <input type="text" name="endDate" id="endDate" /><input class="btn" type="button" id="refresh" value="Refresh"  /></span></h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+            	<td>
+            		<table style="width: 100%">
+            			<tr>
+            				<td style="width: 65%; padding-right: 25px" valign="top">
+            					<h1 class="pbHeader" style="margin-left: 0 !important">Visitor Actions</h1>
+            					<div id='chart_div' style='width: 65%; height: 240px;'><img src="{!BaseURL}/img/loading.gif"/> Loading</div>
+            				</td>
+            				<td style="width: 35%" valign="top">
+            					<div style="height: 273px; overflow-y: scroll">
+	            					<h1 class="pbHeader" style="margin-left: 0 !important">Campaigns</h1>
+	            					<div id='campaigns'><img src="{!BaseURL}/img/loading.gif"/> Loading</div>
+	            					
+	            					<h1 class="pbHeader" style="margin-left: 0 !important">Top Pages</h1>
+	            					<div id='top_pages'><img src="{!BaseURL}/img/loading.gif"/> Loading</div>
+	            					
+	            					<h1 class="pbHeader" style="margin-left: 0 !important">Referring Pages</h1>
+	            					<div id='referring_pages'><img src="{!BaseURL}/img/loading.gif"/> Loading</div>
+            					</div>
+            				</td>
+            			</tr>
+            		</table>
+            		
+            	</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="bPageBlock apexDefaultPageBlock" style="margin-bottom: 0px">
+                    <h1 class="pbHeader" id="aggregates"></h1>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</apex:page>

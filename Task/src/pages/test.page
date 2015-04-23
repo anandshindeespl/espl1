@@ -1,0 +1,6 @@
+<apex:page standardController="Account" recordSetVar="acc">
+     
+     <apex:repeat value="{!acc}" var="accObj">
+      {!accObj.name} <br/>
+     </apex:repeat>
+</apex:page>

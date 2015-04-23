@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Inventory__c$Name</field>
+    </columns>
+    <columns>
+        <field>Inventory__c$Product__c</field>
+    </columns>
+    <columns>
+        <field>Inventory__c$Warehouse_Location__c</field>
+    </columns>
+    <columns>
+        <field>Inventory__c$Qty_on_Hand__c</field>
+    </columns>
+    <columns>
+        <field>Inventory__c$Qty_allocated__c</field>
+    </columns>
+    <columns>
+        <field>Inventory__c$Qty_backorder__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Inventory__c$Qty_backorder__c</column>
+            <operator>greaterThan</operator>
+            <value>0</value>
+        </criteriaItems>
+        <language>en_US</language>
+    </filter>
+    <format>Summary</format>
+    <name>Inventory on Backorder</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Inventory__c</reportType>
+    <scope>user</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Inventory__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CURRENT</interval>
+    </timeFrameFilter>
+</Report>

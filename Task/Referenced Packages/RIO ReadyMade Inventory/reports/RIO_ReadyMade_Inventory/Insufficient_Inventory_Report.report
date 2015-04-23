@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>NAME</field>
+    </columns>
+    <columns>
+        <field>CUSTOMER_PRODUCT_ID</field>
+    </columns>
+    <columns>
+        <field>DESCRIPTION</field>
+    </columns>
+    <columns>
+        <field>Product2.Quantity_on_Hand_Plus__c</field>
+    </columns>
+    <columns>
+        <field>Product2.Quantity_Allocated_Plus__c</field>
+    </columns>
+    <columns>
+        <field>Product2.Quantity_Available_Plus__c</field>
+    </columns>
+    <description>Report by Product on any Inventory where the levels are below threshold</description>
+    <filter>
+        <booleanFilter>((1 AND 2 AND (3 OR 5))) AND 4</booleanFilter>
+        <criteriaItems>
+            <column>Product2.Inventory_Status__c</column>
+            <operator>notContain</operator>
+            <value>Non Inventory Item</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>ACTIVE</column>
+            <operator>equals</operator>
+            <value>1</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Product2.Inventory_Status__c</column>
+            <operator>contains</operator>
+            <value>Low</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Product2.Is_Non_Inventory_Item_Plus__c</column>
+            <operator>notEqual</operator>
+            <value>1</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Product2.Inventory_Status__c</column>
+            <operator>equals</operator>
+            <value>No Inventory</value>
+        </criteriaItems>
+        <language>en_US</language>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Product2.Inventory_Status__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Low Inventory  Report by Product</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>ProductList</reportType>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

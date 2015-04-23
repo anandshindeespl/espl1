@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Allow_Backorders__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Used with the Inventory app, to allow opportunities to be saved when the quantity ordered is greater than the quantity on hand for any products.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this to allow this Opportunity to proceed when there is insufficient stock.</inlineHelpText>
+        <label>Allow Backorders</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Inventory_Allocation_Stage_Plus__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This will determine the Opp probability threshold for an Opportunity Quantity to be considered for Allocation, anything lower than this threshold will not affect any quantity adjustment whatsoever, be it Quantity Allocated or Quantity on Hand.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The probability threshold for which an Opportunity Stage probability is considered valid for allocation, all Opportunity with Stage probability below this is ignored for quantity calculations.</inlineHelpText>
+        <label>Allocation Probablility (%)+</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Inventory_Qualify_Stage__c</fullName>
+        <deprecated>false</deprecated>
+        <description>all Opportunity with Stage probability above this will be considered a sealed deal and will deduct the Quantity on Hand of the related Products rather than being put into Quantity Allocated</description>
+        <externalId>false</externalId>
+        <inlineHelpText>When the Opportunity Probability reaches this value, Quantity on Hand will be decremented.  This is defined in the Configuration screen.</inlineHelpText>
+        <label>Inventory Probablility (%)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Lock__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Lock</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>TrackingNumber__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Tracking Number</label>
+        <length>12</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <webLinks>
+        <fullName>DeliveryStatus</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>true</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>true</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Delivery Status</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>true</showsLocation>
+        <showsStatus>true</showsStatus>
+        <url>http://www.fedex.com/cgi-bin/tracking?tracknumbers={!Opportunity.TrackingNumber__c}&amp;action=track&amp;language=english&amp;cntry_code=us</url>
+    </webLinks>
+</CustomObject>

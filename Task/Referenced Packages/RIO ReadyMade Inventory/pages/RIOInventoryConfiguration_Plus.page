@@ -1,0 +1,101 @@
+<apex:page controller="readymade_inv.ReadyMadeInventoryConfigurationExtension" title="RIO Inventory Configuration Wizard" tabStyle="ReadyMade_Configuration__tab">
+    <apex:form >
+        <div align="left" style="background-image: url({!$Resource.readymade_inv__rio_readymade_inventory_background});background-repeat: repeat-x;" >
+            <a href="http://www.wdcigroup.net" target="_blank">
+                <apex:image id="theImage" value="{!$Resource.readymade_inv__rio_readymade_inventory_background}" style="align:left"/>
+            </a>
+        </div>
+        <br/>
+        
+        <apex:pageBlock title="Old RIO Inventory Migration" rendered="{!migrationPossible}">
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!migrateOldData}" value="Start Migration"/>
+                <apex:commandButton action="{!noToMigration}" value="No Migration"/>                
+            </apex:pageBlockButtons>
+            
+            <!-- Apex message for migration of the old RIO Inventory (1.5) quantity data to the new RIO Inventory (1.6) in quantity on hand --> 
+            <apex:pageBlockSection columns="2">
+                <apex:pageMessage summary="Old RIO Inventory data found, import the values to RIO Inventory Plus?" id="migrationMode" severity="WARNING" strength="3"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="RIO ReadyMade Inventory Configuration">
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!saveConfig_Plus}" value="Save" />
+                <apex:commandButton action="{!cancel_Plus}" value="Cancel"/>
+            </apex:pageBlockButtons>
+            <apex:pageMessages rendered="true"/>
+            
+            <apex:pageBlockSection columns="1" >
+                <apex:inputField value="{!WorkingConfig_Plus.readymade_inv__Enable_Apps__c}"/>
+                <apex:inputField value="{!WorkingConfig_Plus.readymade_inv__Opportunity_Probability_Threshold__c}"/>
+                <apex:inputField value="{!WorkingConfig_Plus.readymade_inv__Quantity_Threshold__c}"/>
+                <apex:inputField value="{!WorkingConfig_Plus.readymade_inv__Overwrite_Product_Threshold__c}"/>  
+            </apex:pageBlockSection>
+                       
+            <apex:pageBlockSection columns="1" title="RIO Inventory Plus settings">
+                <!-- <apex:inputField value="{!WorkingConfig_Plus.readymade_inv__Enable_Plus__c}"/> -->
+                <apex:inputField value="{!WorkingConfig_Plus.readymade_inv__Opportunity_Allocation__c}"/>
+                <apex:selectList id="chooseDefaultLoc" value="{!WorkingConfig_Plus.readymade_inv__Default_Location_choice__c}" size="1" label="Default Location choice">
+                    <apex:selectOption itemValue="Product" itemLabel="Product"/>
+                    <apex:selectOption itemValue="Account" itemLabel="Account"/>
+                </apex:selectList>
+                
+                <apex:selectList id="chooseAutoFill" value="{!WorkingConfig_Plus.readymade_inv__Auto_Fill_Product_External_Id__c}" size="1" label="Auto Fill Product External Id">
+                    <!-- <apex:selectOption itemValue="Do Nothing" itemLabel="Do Nothing"/>-->
+                    <apex:selectOption itemValue="Product Name" itemLabel="Product Name"/>
+                    <apex:selectOption itemValue="Product Code" itemLabel="Product Code"/>
+                </apex:selectList>
+                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!invalidKey}" columns="1">
+                <apex:pageMessage summary="Invalid Key" id="errorKey" severity="ERROR" strength="3"/>
+                <apex:outputLabel value="License Key: " for="keyInput1"/>
+                <apex:inputText value="{!licenseKey}" label="License Key"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!NOT(WorkingConfig_Plus.readymade_inv__Enable_Plus__c) && NOT(WorkingConfig_Plus.readymade_inv__Expired__c) && NOT(invalidKey)}" columns="1">
+                <apex:pageMessage summary="RIO Inventory Basic, Plus Features are disabled, Register for a Trial key" id="basicMode" severity="INFO" strength="3"/>
+                <apex:commandButton action="{!redirect_TFA}" value="Register" style="margin-left: 3%; padding: 3px; border-width: 2px; background: yellow;"/>
+                <apex:inputText value="{!licenseKey}" label="License Key"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!WorkingConfig_Plus.readymade_inv__Enable_Plus__c && NOT(WorkingConfig_Plus.readymade_inv__Expired__c) && NOT(invalidKey)}" columns="1">
+                <apex:pageMessage summary="RIO Inventory Plus , Expires on: {!WorkingConfig_Plus.readymade_inv__Expiry_Date__c}" id="plusMode" severity="CONFIRM" strength="3"/>
+                <apex:inputText value="{!licenseKey}" label="License Key"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!WorkingConfig_Plus.readymade_inv__Enable_Plus__c && WorkingConfig_Plus.readymade_inv__Expired__c && NOT(invalidKey)}" columns="1">
+                <apex:pageMessage summary="RIO Inventory Plus, License Expired " id="expiredMode" severity="WARNING" strength="3"/>
+                <apex:inputText value="{!licenseKey}" label="License Key"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!NOT(WorkingConfig_Plus.readymade_inv__Enable_Plus__c) && WorkingConfig_Plus.readymade_inv__Expired__c && WorkingConfig_Plus.readymade_inv__Trial_License__c && NOT(invalidKey)}" columns="1">
+                <apex:pageMessage summary="RIO Inventory Plus, Trial License Expired, all Plus features disabled " id="trialExpiredMode" severity="WARNING" strength="3"/>
+                <apex:inputText value="{!licenseKey}" label="License Key"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!WorkingConfig_Plus.readymade_inv__Enable_Plus__c}" columns="1">
+                <apex:outputLink value="https://sites.google.com/a/wdcigroup.net/doc---rio-readymade-inventory---user-guide-v2/rio-inventory-plus-1/chapter-1" target="_blank" style="margin-left: 8%;">
+                    Help in configuring RIO Inventory Plus
+                </apex:outputLink>                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{!NOT(WorkingConfig_Plus.readymade_inv__Enable_Plus__c)}" columns="1">
+                <apex:outputLink value="https://sites.google.com/a/wdcigroup.net/doc---rio-readymade-inventory---user-guide-v2/overview" target="_blank" style="margin-left: 8%;">
+                    Help in configuring RIO Inventory Basic
+                </apex:outputLink>                
+            </apex:pageBlockSection>
+            
+            <!-- 
+            <apex:pageBlockSection columns="1" title="RIO Inventory config file status">
+                <apex:outputText value="{!customSettingConfigStatus}" label="custom setting config"/>
+                <apex:outputText value="{!customSettingQoHRollupStatus}" label="custom setting QoH rollup"/>
+                <apex:outputText value="{!customSettingQAllocRollupStatus}" label="custom setting QAlloc rollup"/>
+            </apex:pageBlockSection>
+            -->
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

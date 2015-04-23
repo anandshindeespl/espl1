@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Account_Default_Location_Plus__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASESAFEID(Opportunity.Account.Default_Location_Plus__c)</formula>
+        <label>Account Default Location</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Inventory_Item_Plus__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to the phantom object that will serve as the interface for the Inventory Location Entry to link the OpportunityLineItem with the Inventory Location, necessary as we cannot do lookup to the OpportunityLineItem</description>
+        <externalId>false</externalId>
+        <label>Inventory Item</label>
+        <referenceTo>Inventory_Item__c</referenceTo>
+        <relationshipLabel>Opportunity Product</relationshipLabel>
+        <relationshipName>Opportunity_Product</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Inventory_Stock_Availability_Plus__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF((PricebookEntry.Product2.Is_Non_Inventory_Item_Plus__c == true),IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_green_status&quot;, &quot;green_status&quot;,10,21)+ &quot; Non-inventory Item&quot;, 
+
+IF(Opportunity_Probability_Plus__c &lt; Opportunity.Inventory_Allocation_Stage_Plus__c,
+
+(IF((PricebookEntry.Product2.Quantity_Available_Plus__c - Quantity) &gt; PricebookEntry.Product2.Product_Quantity_Threshold__c, 
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_green_status&quot;, &quot;green_status&quot;,10,21)+&quot; &quot;+ TEXT(PricebookEntry.Product2.Quantity_Available_Plus__c), 
+
+IF((PricebookEntry.Product2.Quantity_Available_Plus__c - Quantity) &lt; 0, 
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_red_status&quot;, &quot;red_status&quot;,10,21)+&quot; &quot;+ TEXT(PricebookEntry.Product2.Quantity_Available_Plus__c), 
+
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_amber_status&quot;,&quot;amber_status&quot;,10,21)+&quot; &quot;+ TEXT(PricebookEntry.Product2.Quantity_Available_Plus__c)
+)))
+
+,
+
+(IF((PricebookEntry.Product2.Quantity_Available_Plus__c) &gt; PricebookEntry.Product2.Product_Quantity_Threshold__c, 
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_green_status&quot;, &quot;green_status&quot;,10,21)+&quot; &quot;+ TEXT(PricebookEntry.Product2.Quantity_Available_Plus__c), 
+
+IF((PricebookEntry.Product2.Quantity_Available_Plus__c) &lt; 0, 
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_red_status&quot;, &quot;red_status&quot;,10,21)+&quot; &quot;+ TEXT(PricebookEntry.Product2.Quantity_Available_Plus__c), 
+
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_amber_status&quot;,&quot;amber_status&quot;,10,21)+&quot; &quot;+ TEXT(PricebookEntry.Product2.Quantity_Available_Plus__c)
+)))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Inventory Stock Availability</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Inventory_Stock_Status_Plus__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF((Opportunity.Lock__c), 
+&quot;Qualified&quot;, 
+
+IF((PricebookEntry.Product2.Is_Non_Inventory_Item_Plus__c == true),IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_green_status&quot;, &quot;green_status&quot;,10,21)+ &quot; Non-inventory Item&quot;,
+
+IF((PricebookEntry.Product2.Quantity_on_Hand_Plus__c - Quantity) &gt; PricebookEntry.Product2.Product_Quantity_Threshold__c,
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_green_status&quot;, &quot;green_status&quot;,10,21)+&quot; QOH (&quot;+ TEXT(PricebookEntry.Product2.Quantity_on_Hand_Plus__c) +&quot;) :- Sufficient Stock&quot;,
+
+IF((PricebookEntry.Product2.Quantity_on_Hand_Plus__c - Quantity) &lt; 0, 
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_red_status&quot;, &quot;red_status&quot;,10,21)+&quot; QOH (&quot;+ TEXT(PricebookEntry.Product2.Quantity_on_Hand_Plus__c) +&quot;) :- Insufficient stock&quot; ,
+
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_amber_status&quot;,&quot;amber_status&quot;,10,21)+&quot;  QOH (&quot;+ TEXT(PricebookEntry.Product2.Quantity_on_Hand_Plus__c) +&quot;) :- Low Stock&quot;) 
+)
+)
+)</formula>
+        <label>Inventory Stock Status</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Opportunity_Probability_Plus__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Opportunity.Probability</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Opportunity Probability</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Product2Id_Lookup_Plus__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Product2Id Lookup</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Opportunity Product</relationshipLabel>
+        <relationshipName>Opportunity_Product</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Product2Id_Ref__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Product2Id_Ref</label>
+        <length>50</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product2Id__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>PricebookEntry.Product2Id</formula>
+        <label>Product2Id</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Default_Location_Plus__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASESAFEID(Product2Id_Lookup_Plus__r.Default_Location_Plus__c)</formula>
+        <label>Product Default Location</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Stock_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF((Opportunity.Lock__c), &quot;Qualified&quot;,
+	IF(( ISNULL( PricebookEntry.Product2.Quantity_On_Hand__c)),IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_green_status&quot;, &quot;green_status&quot;,10,21)+ &quot; Non-inventory Item&quot;,
+	IF((Quantity_On_Hand__c - Quantity)  &gt; PricebookEntry.Product2.Product_Quantity_Threshold__c ,  IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_green_status&quot;, &quot;green_status&quot;,10,21)+&quot; Quantity on Hand (&quot;+ TEXT(PricebookEntry.Product2.Quantity_On_Hand__c) +&quot;) :- Sufficient Stock&quot;  ,
+		IF((Quantity_On_Hand__c - Quantity)   &lt; 0, IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_red_status&quot;, &quot;red_status&quot;,10,21)+&quot; Quantity on Hand (&quot;+ TEXT(PricebookEntry.Product2.Quantity_On_Hand__c) +&quot;) :- Insufficient stock  to satisfy this order!&quot; , IF((PricebookEntry.Product2.Quantity_On_Hand__c  - PricebookEntry.Product2.Product_Quantity_Threshold__c) &lt; 0, IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_amber_status&quot;,&quot;amber_status&quot;,10,21)+&quot;  Quantity on Hand (&quot;+ TEXT(PricebookEntry.Product2.Quantity_On_Hand__c) +&quot;) :- Current stock is below the defined threshold of :- &quot;+ 
+TEXT(PricebookEntry.Product2.Product_Quantity_Threshold__c),
+IMAGE(&quot;/resource/readymade_inv__rio_readymade_inventory_amber_status&quot;,&quot;amber_status&quot;,10,21)+&quot;  Quantity on Hand (&quot;+ TEXT(PricebookEntry.Product2.Quantity_On_Hand__c) +&quot;) :- Current stock will fall below the defined threshold of :- &quot;+ 
+TEXT(PricebookEntry.Product2.Product_Quantity_Threshold__c)))
+)
+)
+)</formula>
+        <label>Product Stock Status</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_On_Hand__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>PricebookEntry.Product2.Quantity_On_Hand__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Quantity On Hand</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <webLinks>
+        <fullName>Inventory_Allocation</fullName>
+        <availability>online</availability>
+        <description>button to call the custom VF page to handle the inventory management</description>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Inventory Allocation</masterLabel>
+        <openType>sidebar</openType>
+        <page>OppProdInvAllocWizard_Plus</page>
+        <protected>false</protected>
+    </webLinks>
+</CustomObject>
