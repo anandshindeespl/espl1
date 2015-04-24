@@ -12,10 +12,9 @@ public with sharing class ReadAndProcessCSV {
             else {
             //URL = '/resource/'+ 'CsvToJson/CsvToJson' + '/Ens_Domain.csv';
             //URL = '/resource/'+ 'CsvToJson/CsvToJson' + '/Ens_Credential.csv';
-            //URL = '/resource/'+ 'CsvToJson/CsvToJson' + '/Ens_ObjectMapping.csv';
-            //URL = '/resource/'+ 'CsvToJson/CsvToJson' + '/Ens_ContentMapping-new.csv';
-            URL = '/resource/'+ 'CsvToJson/CsvToJson' + '/Ens_EventQueuer.csv';
-            system.debug('andy');
+            URL = '/resource/'+ 'CsvToJson/CsvToJson' + '/Ens_ObjectMapping.csv';
+           
+            
             PageReference pr = new PageReference(URL);
             Filecontent = pr.getContent();
             }
@@ -40,26 +39,13 @@ public with sharing class ReadAndProcessCSV {
                 system.debug('RowHeaderList'+RowHeaderList);
                 system.debug('RowHeaderList2'+RowHeaderList.get(0));
                 
-                for(Integer j=1 ; j < strRowList.size(); j++)
+                for(Integer j=1, k=0 ; j < strRowList.size(); j++)
                 {
                     system.debug('in inner for');
-                    RowFieldList=strRowList.get(j).split(',(?=([^"]*"[^"]*")*[^\"]*$)');
-                    //RowFieldList=strRowList.get(j).split(',');    
+                    RowFieldList=strRowList.get(j).split(',');
+                        
                     for(Integer p=0; p< RowHeaderList.size(); p++)
                     {
-                       system.debug('strrr'+RowFieldList.get(p));
-                       
-                       String strField;
-                       if(RowFieldList.get(p).trim().contains('{'))
-                       {
-                       	     strField=RowFieldList.get(p).trim().replaceAll('"','\\\\"');
-                       	    //strField =strField2.replaceAll('"','\\\\"').trim(); 
-                       	    system.debug('strField'+strField);
-                       } else 
-                       {
-                       	    strField=RowFieldList.get(p).trim();
-                       }
-                       system.debug('anand'+strField);
                         if(RowHeaderList.get(p).contains('.')) 
                         {
                             system.debug('in if');
@@ -69,21 +55,21 @@ public with sharing class ReadAndProcessCSV {
                                 if(j==strRowList.size()-1)
                                 {
                                     
-                                    strjsn= '"'+RowHeaderList.get(p).substringBefore('.').trim()+'":{"'+ RowHeaderList.get(p).substringAfterLast('.').trim()+'":"'+strField.trim() +'"}}' ;
+                                    strjsn= '"'+RowHeaderList.get(p).substringBefore('.').trim()+'":{"'+ RowHeaderList.get(p).substringAfterLast('.').trim()+'":"'+RowFieldList.get(p).trim() +'"}' ;
                                     jsonList.add(strjsn.trim());
                                       
                                 }   else{
-                                            strjsn= '"'+RowHeaderList.get(p).substringBefore('.').trim() +'":{"'+ RowHeaderList.get(p).substringAfterLast('.').trim()+'":"'+strField.trim() +'"}},' ;
+                                            strjsn= '"'+RowHeaderList.get(p).substringBefore('.').trim() +'":{"'+ RowHeaderList.get(p).substringAfterLast('.').trim()+'":"'+RowFieldList.get(p).trim() +'"}},' ;
                                             jsonList.add(strjsn.trim());
                                         }
                             }   else {
 	                                      if(p==0)
 	                                      {
-	                                          strjsn= '{"'+RowHeaderList.get(p).substringBefore('.').trim() +'":{"'+ RowHeaderList.get(p).substringAfterLast('.').trim()+'":"'+strField.trim() + '"},' ;
+	                                          strjsn= '{"'+RowHeaderList.get(p).substringBefore('.').trim() +'":{"'+ RowHeaderList.get(p).substringAfterLast('.').trim()+'":"'+RowFieldList.get(p).trim() + '"},' ;
 	                                          jsonList.add(strjsn.trim());
 	                                            
 	                                      }   else {
-	                                                  strjsn= '"'+RowHeaderList.get(p).substringBefore('.').trim() +'":{"'+ RowHeaderList.get(p).substringAfterLast('.').trim()+'":"'+strField.trim() +'"},' ;
+	                                                  strjsn= '"'+RowHeaderList.get(p).substringBefore('.').trim() +'":{"'+ RowHeaderList.get(p).substringAfterLast('.').trim()+'":"'+RowFieldList.get(p).trim() +'"},' ;
 	                                                  jsonList.add(strjsn.trim());
 	                                               }
                                      }
@@ -93,19 +79,19 @@ public with sharing class ReadAndProcessCSV {
 	                                {
 	                                   if(j==strRowList.size()-1)
 	                                   {
-	                                       strjsn = '"'+RowHeaderList.get(p).trim() +'" : "' +strField.trim() +'" }' ;
+	                                       strjsn = '"'+RowHeaderList.get(p).trim() +'" : "' +RowFieldList.get(p).trim() +'" }' ;
 	                                       jsonList.add(strjsn.trim());
 	                                   }   else {
-	                                               strjsn = '"'+RowHeaderList.get(p).trim() +'" : "' +strField.trim() +'" },' ;
+	                                               strjsn = '"'+RowHeaderList.get(p).trim() +'" : "' +RowFieldList.get(p).trim() +'" },' ;
 	                                               jsonList.add(strjsn.trim());
 	                                            }
 	                                } else {
 	                                           if(p==0)
 	                                           {
-	                                               strjsn = '{"'+RowHeaderList.get(p).trim() +'" : "' +strField.trim() +'" ,' ;
+	                                               strjsn = '{"'+RowHeaderList.get(p).trim() +'" : "' +RowFieldList.get(p).trim() +'" ,' ;
 	                                               jsonList.add(strjsn.trim());
 	                                           }   else{
-                                                            strjsn = '"'+RowHeaderList.get(p).trim() +'" : "' +strField.trim() +'" ,' ;
+                                                            strjsn = '"'+RowHeaderList.get(p).trim() +'" : "' +RowFieldList.get(p).trim() +'" ,' ;
                                                             jsonList.add(strjsn.trim());
                                                        }
                                            }
